@@ -1,2 +1,5 @@
-package com.example.nutrition.domain;public class UserDto {
+package com.example.nutrition.domain;
+
+public class UserDto {
+    private
 }

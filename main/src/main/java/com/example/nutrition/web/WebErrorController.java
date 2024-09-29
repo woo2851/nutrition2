@@ -1,4 +1,4 @@
-package com.example.nutrition.controller;
+package com.example.nutrition.web;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;

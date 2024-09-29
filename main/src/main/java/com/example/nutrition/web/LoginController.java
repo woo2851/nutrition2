@@ -8,10 +8,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("login")
-public class UserController {
-    private UserService userService;
+public class LoginController {
+    private final UserService userService;
 
-    public UserController(UserService userService) {this.userService = userService;}
+    public LoginController(UserService userService) {this.userService = userService;}
 
     @PostMapping("{id}")
     public Optional<User> getbyId(@PathVariable String id) {

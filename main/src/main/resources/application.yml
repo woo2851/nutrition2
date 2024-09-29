@@ -1,1 +1,17 @@
-spring.application.name=nutrition
+server:
+  port: 9001
+
+spring:
+  spring:
+    application:
+      name: login-service
+  datasource:
+    url: jdbc:postgresql://nutrition.postgres.database.azure.com:5432/postgres?user=woo2851&password=tjdals0815!&sslmode=require
+    username: woo2851@nutrition.postgres.database.azure.com
+    password: tjdals0815!
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
