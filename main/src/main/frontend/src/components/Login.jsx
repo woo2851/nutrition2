@@ -21,7 +21,7 @@ export default function Login() {
   const handleClick = () => {
     const isBlank = checkBlank()
     if(isBlank == true) {
-      alert("please type your id or password")
+      alert("아이디와 비밀번호를 입력해주세요")
     }
     else{
       login(id,pw)
@@ -60,8 +60,7 @@ export default function Login() {
         <a id="reset">초기화</a>
       </li>
     </ul>
-    
-    <form  action="" method="post">
+    <form action="">
       <div class="first-input input__block first-input__block">
          <input placeholder="Id" class="input" id="email" value={id} onChange={saveUserId}/>
       </div>
@@ -71,7 +70,7 @@ export default function Login() {
       <button class="signin__btn" onClick={handleClick}>
         로그인
       </button>
-    </form>
+      </form>
     <div class="separator">
       <p>OR</p>
     </div>

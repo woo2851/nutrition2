@@ -1,20 +1,27 @@
 package com.example.nutrition.web;
 
+import com.example.nutrition.domain.JoinRequest;
+import com.example.nutrition.domain.LoginRequest;
 import com.example.nutrition.domain.User;
 import com.example.nutrition.domain.UserService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
 @RestController
-@RequestMapping("login")
+@RequiredArgsConstructor
 public class LoginController {
     private final UserService userService;
 
-    public LoginController(UserService userService) {this.userService = userService;}
+    @PostMapping("/Login/{id}")
+    public User login(@RequestBody LoginRequest req) {
+        return this.userService.login(req);
+    }
 
-    @PostMapping("{id}")
-    public Optional<User> getbyId(@PathVariable String id) {
-        return userService.getUser(id);
+    @PostMapping("/SignUp/{id}")
+    public void signup(@Valid @RequestBody JoinRequest req) {
+        this.userService.join(req);
     }
 }

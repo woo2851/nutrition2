@@ -7,6 +7,7 @@ export default function SignUp() {
 
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
+  const [pwCheck, setPwCheck] = useState('');
   const { isLoggedIn, changeLogin, signUp, login, logout, user} = useLogin()
 
   const saveUserId = event => {
@@ -17,18 +18,26 @@ export default function SignUp() {
     setPw(event.target.value);
   };
 
+  const saveUserPwCheck = event => {
+    setPwCheck(event.target.value);
+  };
+
   const handleClick = (e) => {
     const isBlank = checkBlank()
     if(isBlank == true) {
-      alert("please type your id or password")
+      alert("아이디와 비밀번호를 입력해주세요")
+    }
+    else if(pw != pwCheck) {
+      alert("비밀번호를 다시한번 확인해주세요")
     }
     else{
+      console.log(id, pw)
       signUp(id,pw)
     }
   }
 
   const checkBlank = () => {
-    if (id == "" || pw == ""){
+    if (id == "" || pw == "" || pwCheck == ""){
       return true
     }
     else{
@@ -59,17 +68,18 @@ export default function SignUp() {
       </li>
     </ul>
     
-    <form  action="" method="post">
+      <form action="">
       <div class="first-input input__block first-input__block">
          <input placeholder="Id" class="input" id="email" value={id} onChange={saveUserId}/>
       </div>
       <div class="input__block">
-         <input type="password" placeholder="Password" class="input" id="password" value={pw} onChange={saveUserPw} onKeyDown={(e) => activeEnter(e)}/>
+         <input type="password" placeholder="Password" class="input" id="password" value={pw} onChange={saveUserPw}/>
+         <input type="password" placeholder="PasswordCheck" class="input" id="password" value={pwCheck} onChange={saveUserPwCheck} onKeyDown={(e) => activeEnter(e)}/>
       </div>
       <button class="signin__btn" onClick={handleClick}>
         회원가입
       </button>
-    </form>
+      </form>
     <div class="separator">
       <p>OR</p>
     </div>
