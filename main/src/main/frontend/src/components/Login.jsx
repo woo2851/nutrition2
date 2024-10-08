@@ -18,7 +18,8 @@ export default function Login() {
     setPw(event.target.value);
   };
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    e.preventDefault()
     const isBlank = checkBlank()
     if(isBlank == true) {
       alert("아이디와 비밀번호를 입력해주세요")

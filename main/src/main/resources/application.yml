@@ -25,3 +25,7 @@ logging:
         type:
           descriptor:
             sql: trace
+
+custom:
+  api:
+    key: DefaultEndpointsProtocol=https;AccountName=woo2851;AccountKey=C2+5QntmqCimJ6qJi8CQOG7uRY5h9W8hqSBvGkiGz0pnEdPgsrKwcFVZUo91Oypa9bwqOfbAti4g+AStzkJkmQ==;EndpointSuffix=core.windows.net

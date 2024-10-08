@@ -15,12 +15,12 @@ import java.util.Optional;
 public class LoginController {
     private final UserService userService;
 
-    @PostMapping("/Login/{id}")
-    public User login(@RequestBody LoginRequest req) {
+    @PostMapping("/login/{id}")
+    public String login(@RequestBody LoginRequest req) {
         return this.userService.login(req);
     }
 
-    @PostMapping("/SignUp/{id}")
+    @PostMapping("/signup/{id}")
     public void signup(@Valid @RequestBody JoinRequest req) {
         this.userService.join(req);
     }

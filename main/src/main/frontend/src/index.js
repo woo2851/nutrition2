@@ -8,6 +8,9 @@ import SignUp from './components/SignUp';
 import Main from './components/Main';
 import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
+import Dashboard from './components/Dashboard';
+import Goal from './components/Goal';
+import Upload from './components/Upload';
 
 const router = createBrowserRouter([
   {
@@ -20,8 +23,9 @@ const router = createBrowserRouter([
       {path: 'signup', element: <SignUp/>},
       {path: 'main', element: <Main/>},
       {path: 'mypage', element: <MyPage/>},
-      {path: 'dashboard', element: <Main/>},
-      {path: 'goal', element: <Main/>},
+      {path: 'dashboard', element: <Dashboard/>},
+      {path: 'goal', element: <Goal/>},
+      {path: 'upload', element: <Upload/>},
     ]
   }
 ])
