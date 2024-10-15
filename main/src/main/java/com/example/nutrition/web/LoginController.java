@@ -21,7 +21,7 @@ public class LoginController {
     }
 
     @PostMapping("/signup/{id}")
-    public void signup(@Valid @RequestBody JoinRequest req) {
-        this.userService.join(req);
+    public String signup(@Valid @RequestBody JoinRequest req) {
+        return this.userService.join(req);
     }
 }

@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Getter
 @Setter
@@ -18,9 +19,11 @@ public class JoinRequest {
     private String password;
 
     public User toEntity() {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
+        System.out.println(hashedPassword);
         return User.builder()
                 .loginId(this.loginId)
-                .password(this.password)
+                .password(hashedPassword)
                 .build();
     }
 }
