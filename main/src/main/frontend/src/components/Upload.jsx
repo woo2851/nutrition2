@@ -17,8 +17,6 @@ export default function Upload() {
         reader.readAsDataURL(selectedFile);
         reader.onloadend = () => {
             SetImage(reader.result);
-            user.image = reader.result
-            setUser(user)
       };
       const formData = new FormData();
       formData.append('file', selectedFile);
@@ -28,16 +26,29 @@ export default function Upload() {
 
     const handleUpload = (e) => {
         e.preventDefault()
+        navigate("/loding")
         uploadFile(user, formData)
+        
       }
 
     return (
-    <div>
-    <input type="file" onChange={handleFileChange} id="avatar" name="file" accept="image/png, image/jpeg, image/jpg"/>
+    <div className='upload_container'>
+      <div className='upload'>
+        <input type="file" onChange={handleFileChange} id="avatar" name="file" accept="image/png, image/jpeg, image/jpg"/>
+        <div className='preview_description'>
+        {image && <h4>식품명 : </h4>}
+        {image && <input></input>}
+        </div>
     <div className='file_preview'>
     {image && <img className='image' src={image} alt="preview" />}
         </div>
         <button type="button" onClick={handleUpload}>upload</button>
     </div>
+    <div className='upload_example'>
+    <h2>이미지 업로드 예</h2>
+    <img className='image' src="image/cocoa2.jpg" alt="" />
+    </div>
+    </div>
+    
   )
 }

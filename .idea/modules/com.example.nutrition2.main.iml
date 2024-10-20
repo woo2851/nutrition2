@@ -4,11 +4,5 @@
     <content url="file://$MODULE_DIR$/../../main/build/generated/sources/annotationProcessor/java/main">
       <sourceFolder url="file://$MODULE_DIR$/../../main/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
     </content>
-    <content url="file://$MODULE_DIR$/../../main/src/main" dumb="true">
-      <excludeFolder url="file://$MODULE_DIR$/../../main/src/main/frontend/node_modules/detect-port-alt/.vscode" />
-      <excludeFolder url="file://$MODULE_DIR$/../../main/src/main/frontend/node_modules/iconv-lite/.idea" />
-      <excludeFolder url="file://$MODULE_DIR$/../../main/src/main/frontend/node_modules/postcss-initial/.vscode" />
-      <excludeFolder url="file://$MODULE_DIR$/../../main/src/main/frontend/node_modules/rollup-plugin-terser/node_modules/serialize-javascript/.vscode" />
-    </content>
   </component>
 </module>

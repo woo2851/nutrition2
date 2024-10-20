@@ -39,5 +39,14 @@ export default class UserService{
       console.error('Error uploading photo:', error);
     }
   };
+
+  async getNutrition(id, nutrition){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/${id}/${nutrition}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
 }
 

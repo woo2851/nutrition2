@@ -11,13 +11,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.UUID;
-import java.util.Optional;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+
 import org.mindrot.jbcrypt.BCrypt;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -28,6 +26,7 @@ import java.io.InputStreamReader;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserNutritionRepository userNutritionRepository;
 
     @Value("${custom.api.key}")
     private String connectionString;
@@ -93,7 +92,37 @@ public class UserService {
             e.printStackTrace();
         }
         StringBuffer result = run_clova(file_url);
-        preprocessing(result);
+        ArrayList<Float> array = preprocessing(result);
+        UserNutrition temp = UserNutrition.builder()
+                .userId(id)
+                .kcal(array.get(0))
+                .carb(array.get(1))
+                .sugar(array.get(2))
+                .Fat(array.get(3))
+                .protein(array.get(4))
+                .imageurl(file_url)
+                .date(LocalDate.now())
+                .build();
+        this.userNutritionRepository.save(temp);
+        List<UserNutrition> user_nutrition_list =  this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
+        Float kcal  = (float) 0;
+        Float carb = (float) 0;
+        Float sugar = (float) 0;
+        Float Fat = (float) 0;
+        Float protein = (float) 0;
+        for(int i = 0; i < user_nutrition_list.size(); i++){
+            UserNutrition userNutrition = user_nutrition_list.get(i);
+            kcal += userNutrition.getKcal();
+            carb += userNutrition.getCarb();
+            sugar += userNutrition.getSugar();
+            Fat += userNutrition.getFat();
+            protein += userNutrition.getProtein();
+        }
+        System.out.println("kcal : " + kcal);
+        System.out.println("carb : " +carb);
+        System.out.println("sugar : " +sugar);
+        System.out.println("fat : " + Fat);
+        System.out.println("protein : " +protein);
     }
 
     public StringBuffer run_clova(String file_url) {
@@ -153,7 +182,7 @@ public class UserService {
             }
         }
 
-        public void preprocessing(StringBuffer result) {
+        public ArrayList<Float> preprocessing(StringBuffer result) {
 
             List<String> nutrition_list = List.of("kcal", "탄수화물", "당류", "지방", "단백질");
             ArrayList<String> list = new ArrayList<>();
@@ -208,7 +237,76 @@ public class UserService {
                     }
                 }
                 System.out.println(nutrition_array);
+                return nutrition_array;
+                }
+
+        public ArrayList<ArrayList> getNutrition(String id, String nutrition){
+            ArrayList<ArrayList> result = new ArrayList<>();
+            ArrayList<LocalDate> nutrition_key = new ArrayList<>();
+            ArrayList<Float> nutrition_value = new ArrayList<>();
+            for(int j=4; j>=0; j--){
+                List<UserNutrition> users = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now().minusDays(j));
+
+                if (users.size() == 0){
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add((float) 0);
+                    continue;
+                }
+
+                if(nutrition.equals("kcal")){
+                    Float kcal = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        kcal += userNutrition.getKcal();
+                    }
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add(kcal);
+                }
+                else if(nutrition.equals("carb")){
+                    Float carb = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        carb += userNutrition.getCarb();
+                    }
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add(carb);
+                }
+                else if(nutrition.equals("sugar")){
+                    Float sugar = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        sugar += userNutrition.getSugar();
+                    }
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add(sugar);
+                }
+                else if(nutrition.equals("fat")){
+                    Float fat = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        fat += userNutrition.getFat();
+                    }
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add(fat);
+                }
+                else if(nutrition.equals("protein")){
+                    Float protein = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        protein += userNutrition.getProtein();
+                    }
+                    nutrition_key.add(LocalDate.now().minusDays(j));
+                    nutrition_value.add(protein);
+                }
+                else{
+                    return null;
                 }
             }
+            result.add(nutrition_key);
+            result.add(nutrition_value);
+            System.out.println(result);
+            return result;
+        }
+    }
 
 

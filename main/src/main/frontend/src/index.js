@@ -11,6 +11,7 @@ import NotFound from './components/NotFound';
 import Dashboard from './components/Dashboard';
 import Goal from './components/Goal';
 import Upload from './components/Upload';
+import Spinner from './components/Spinner';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,7 @@ const router = createBrowserRouter([
       {path: 'dashboard', element: <Dashboard/>},
       {path: 'goal', element: <Goal/>},
       {path: 'upload', element: <Upload/>},
+      {path: 'loding', element: <Spinner/>},
     ]
   }
 ])
