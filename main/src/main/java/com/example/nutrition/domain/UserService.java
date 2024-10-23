@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -28,8 +29,14 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserNutritionRepository userNutritionRepository;
 
-    @Value("${custom.api.key}")
+    @Value("${custom.api.azure_connection}")
     private String connectionString;
+
+    @Value("${custom.api.ocr_url}")
+    private String apiURL;
+
+    @Value("${custom.api.ocr_key}")
+    private String secretKey;
 
     public boolean checkLoginIdDuplicate(String loginId) {
         return userRepository.existsByLoginId(loginId);
@@ -91,7 +98,7 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        StringBuffer result = run_clova(file_url);
+        StringBuffer result = run_clova(file_url, apiURL, secretKey);
         ArrayList<Float> array = preprocessing(result);
         UserNutrition temp = UserNutrition.builder()
                 .userId(id)
@@ -125,9 +132,7 @@ public class UserService {
         System.out.println("protein : " +protein);
     }
 
-    public StringBuffer run_clova(String file_url) {
-        String apiURL = "https://svexlmgbex.apigw.ntruss.com/custom/v1/34998/257c4a121ae568ba528fa07d0d0254b2ae4146912586e65a241e42520b0080ac/general";
-        String secretKey = "eXp5Y1BBZG5kZE1QYldpUUVjc3BhZmh3bWF2b0F2bEk=";
+    public StringBuffer run_clova(String file_url, String apiURL, String secretKey) {
 
         try {
             URL url = new URL(apiURL);
@@ -304,6 +309,60 @@ public class UserService {
             }
             result.add(nutrition_key);
             result.add(nutrition_value);
+            System.out.println(result);
+            return result;
+        }
+
+        public ArrayList<ArrayList> getNutritionAll(String id) {
+            ArrayList<ArrayList> result = new ArrayList<>();
+            ArrayList<LocalDate> temp_date = new ArrayList<>();
+            ArrayList<Float> temp_kcal = new ArrayList<>();
+            ArrayList<Float> temp_carb = new ArrayList<>();
+            ArrayList<Float> temp_sugar = new ArrayList<>();
+            ArrayList<Float> temp_fat = new ArrayList<>();
+            ArrayList<Float> temp_protein = new ArrayList<>();
+
+            for (int j = 4; j >= 0; j--) {
+                List<UserNutrition> users = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now().minusDays(j));
+
+                if (users.size() == 0) {
+                    temp_date.add(LocalDate.now().minusDays(j));
+                    temp_kcal.add((float) 0);
+                    temp_carb.add((float) 0);
+                    temp_sugar.add((float) 0);
+                    temp_fat.add((float) 0);
+                    temp_protein.add((float) 0);
+                }
+
+                else {
+                    temp_date.add(LocalDate.now().minusDays(j));
+                    float kcal = (float) 0;
+                    float carb = (float) 0;
+                    float sugar = (float) 0;
+                    float fat = (float) 0;
+                    float protein = (float) 0;
+                    for(int i = 0; i < users.size(); i++){
+                        UserNutrition userNutrition = users.get(i);
+                        kcal += userNutrition.getKcal();
+                        carb += userNutrition.getCarb();
+                        sugar += userNutrition.getSugar();
+                        fat += userNutrition.getFat();
+                        protein += userNutrition.getProtein();
+                    }
+
+                    temp_kcal.add(kcal);
+                    temp_carb.add(carb);
+                    temp_sugar.add(sugar);
+                    temp_fat.add(fat);
+                    temp_protein.add(protein);
+                }
+            }
+            result.add(temp_date);
+            result.add(temp_kcal);
+            result.add(temp_carb);
+            result.add(temp_sugar);
+            result.add(temp_fat);
+            result.add(temp_protein);
             System.out.println(result);
             return result;
         }

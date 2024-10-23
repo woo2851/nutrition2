@@ -48,5 +48,14 @@ export default class UserService{
       console.error('Error getting nutrition:', error);
     }
   };
+
+  async getNutritionAll(id){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/all/${id}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
 }
 
