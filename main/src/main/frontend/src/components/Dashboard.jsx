@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Chart from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import { useLogin } from './context/LoginContext'
@@ -6,7 +6,7 @@ import './nav_footer.css'
 
 export default function Dashboard() {
 
-  const { isLoggedIn, changeLogin, login, logout, user, getNutritionContext, getNutritionAllContext} = useLogin()
+  const { isLoggedIn, user, getNutritionContext, getNutritionAllContext} = useLogin()
 
   const nutrition_list = ["kcal", "탄수화물", "당류", "지방", "단백질"]
 
@@ -36,7 +36,7 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (isLoggedIn == true){
+    if (isLoggedIn === true){
       const data = async () => {
         try {
           const nutrition = await getNutritionAllContext(user)

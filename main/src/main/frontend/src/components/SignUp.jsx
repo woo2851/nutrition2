@@ -8,9 +8,9 @@ export default function SignUp() {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [pwCheck, setPwCheck] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-  const [weight, setWeight] = useState(0);
-  const { isLoggedIn, changeLogin, signUp, login, logout, user} = useLogin()
+  const [gender, setGender] = useState('');
+  const [weight, setWeight] = useState('');
+  const { signUp } = useLogin()
 
   const saveUserId = event => {
     setId(event.target.value);
@@ -31,36 +31,31 @@ export default function SignUp() {
   const handleClick = (e) => {
     e.preventDefault()
     const isBlank = checkBlank()
-    if(isBlank == true) {
-      alert("아이디와 비밀번호를 입력해주세요")
+    if(isBlank === true) {
+      alert("정보를 입력해주세요")
     }
-    else if(pw != pwCheck) {
+    else if(pw !== pwCheck) {
       alert("비밀번호를 다시한번 확인해주세요")
     }
     else{
-      console.log(id, pw)
-      signUp(id,pw)
+      signUp(id, pw, gender, weight)
     }
   }
 
   const handleChange = (event) => {
-    setSelectedOption(event.target.value);
+    console.log(event.target.value)
+    setGender(event.target.value);
+    console.log(gender)
   };
 
   const checkBlank = () => {
-    if (id == "" || pw == "" || pwCheck == ""){
+    if (id === "" || pw === "" || pwCheck === "" ||  weight === ""){
       return true
     }
     else{
       return false
     }
   } 
-
-  const activeEnter = (e) => {
-    if(e.key === "Enter") {
-      handleClick()
-    }
-  }
 
   return (
     <div class="container">
@@ -85,7 +80,7 @@ export default function SignUp() {
       </div>
       <div class="input__block">
          <input type="password" placeholder="비밀번호" class="input" id="password" value={pw} onChange={saveUserPw}/>
-         <input type="password" placeholder="비밀번호확인" class="input" id="password" value={pwCheck} onChange={saveUserPwCheck} onKeyDown={(e) => activeEnter(e)}/>
+         <input type="password" placeholder="비밀번호확인" class="input" id="password" value={pwCheck} onChange={saveUserPwCheck}/>
          <input placeholder="체중" class="input" value={weight} onChange={saveUserWeight}/>
          
       </div>
@@ -95,20 +90,20 @@ export default function SignUp() {
         <label>
           <input
             type="radio"
-            value="option1"
-            checked={selectedOption === 'option1'}
+            value="male"
+            checked={gender === 'male'}
             onChange={handleChange}
           />
-          남자
+          male
         </label>
         <label>
           <input
             type="radio"
-            value="option2"
-            checked={selectedOption === 'option2'}
+            value="female"
+            checked={gender === 'female'}
             onChange={handleChange}
           />
-          여자
+          female
         </label>
       </div>
     </div>

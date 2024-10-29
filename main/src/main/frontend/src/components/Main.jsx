@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import "./main.css"
-import { useLogin } from './context/LoginContext'
 import { Link } from 'react-router-dom'
 
 export default function Main() {

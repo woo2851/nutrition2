@@ -18,7 +18,7 @@ export const LoginProvider = ({ children }) => {
     const new_user = await user.login(id,pw)
     console.log(new_user)
     
-    if(new_user.data != "") {
+    if(new_user.data !== "") {
       user.id = new_user.data
       setUser(user)
       navigate("/main")
@@ -30,11 +30,11 @@ export const LoginProvider = ({ children }) => {
     }
   }
 
-  const signUp = async (id,pw) => {
-    const new_user = await user.signUp(id,pw)
+  const signUp = async (id, pw, gender, weight) => {
+    const new_user = await user.signUp(id, pw, gender, weight)
     console.log(new_user)
   
-    if(new_user.data == "") {
+    if(new_user.data === "") {
       alert("user already exists")
     }
     else {
@@ -59,6 +59,7 @@ export const LoginProvider = ({ children }) => {
   const uploadFile = async (user, formData) => {
     try{
       const result = await user.uploadFile(user.id, formData)
+      console.log(result)
       navigate("/upload")
       alert("업로드 성공!")
     }
@@ -72,23 +73,23 @@ export const LoginProvider = ({ children }) => {
   }
 
   const getNutritionContext = async (user, nutrition) => {
-    if(nutrition == "kcal"){
+    if(nutrition === "kcal"){
       const result = await user.getNutrition(user.id, "kcal")
       return result.data
     }
-    else if(nutrition == "탄수화물"){
+    else if(nutrition === "탄수화물"){
       const result = await user.getNutrition(user.id, "carb")
       return result.data
     }
-    else if(nutrition == "당류"){
+    else if(nutrition === "당류"){
       const result = await user.getNutrition(user.id, "sugar")
       return result.data
     }
-    else if(nutrition == "지방"){
+    else if(nutrition === "지방"){
       const result = await user.getNutrition(user.id, "fat")
       return result.data
     }
-    else if(nutrition == "단백질"){
+    else if(nutrition === "단백질"){
       const result = await user.getNutrition(user.id, "protein")
       return result.data
     }

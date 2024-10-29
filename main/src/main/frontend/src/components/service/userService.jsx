@@ -18,12 +18,14 @@ export default class UserService{
     }
   }
 
-  async signUp(loginId, password){
+  async signUp(loginId, password, gender, weight){
     try{
       return(
       await axios.post(`http://localhost:9001/signup/${loginId}`, {
         loginId: loginId,
         password: password,
+        gedner: gender,
+        weight: weight
       })
       .then((res) => {return res}))
     } catch(e) {

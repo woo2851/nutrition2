@@ -1,6 +1,5 @@
 import React, { useState} from 'react'
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { useLogin } from './context/LoginContext';
 import './login_signup.css'
 
@@ -8,7 +7,7 @@ export default function Login() {
 
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
-  const { isLoggedIn, changeLogin, login, logout, user} = useLogin()
+  const { login } = useLogin()
 
   const saveUserId = event => {
     setId(event.target.value);
@@ -21,7 +20,7 @@ export default function Login() {
   const handleClick = (e) => {
     e.preventDefault()
     const isBlank = checkBlank()
-    if(isBlank == true) {
+    if(isBlank === true) {
       alert("아이디와 비밀번호를 입력해주세요")
     }
     else{
@@ -30,7 +29,7 @@ export default function Login() {
   }
  
   const checkBlank = () => {
-    if (id == "" || pw == ""){
+    if (id === "" || pw === ""){
       return true
     }
     else{

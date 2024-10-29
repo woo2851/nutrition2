@@ -6,7 +6,7 @@ import "./nav_footer.css"
 export default function Upload() {
 
     const navigate = useNavigate()
-    const { isLoggedIn, logout, user, uploadFile, setUser} = useLogin()
+    const { user, uploadFile} = useLogin()
     const [image, SetImage] = useState("")
     const [formData, SetformData] = useState(null)
     let selectedFile = null

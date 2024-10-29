@@ -2,13 +2,10 @@ package com.example.nutrition.web;
 
 import com.example.nutrition.domain.JoinRequest;
 import com.example.nutrition.domain.LoginRequest;
-import com.example.nutrition.domain.User;
 import com.example.nutrition.domain.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

@@ -5,9 +5,9 @@ import { useLogin } from './context/LoginContext'
 
 export default function Nav() {
 
-  const { isLoggedIn, logout, user} = useLogin()
+  const { isLoggedIn, user} = useLogin()
 
-  if (isLoggedIn == true) {
+  if (isLoggedIn === true) {
     console.log(user)
     return (
       <div className='nav'>
