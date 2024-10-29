@@ -63,10 +63,10 @@ export default function Login() {
     </ul>
     <form action="">
       <div class="first-input input__block first-input__block">
-         <input placeholder="Id" class="input" id="email" value={id} onChange={saveUserId}/>
+         <input placeholder="아이디" class="input" id="email" value={id} onChange={saveUserId}/>
       </div>
       <div class="input__block">
-         <input type="password" placeholder="Password" class="input" id="password" value={pw} onChange={saveUserPw} onKeyDown={(e) => activeEnter(e)}   />
+         <input type="password" placeholder="비밀번호" class="input" id="password" value={pw} onChange={saveUserPw} onKeyDown={(e) => activeEnter(e)}   />
       </div>
       <button class="signin__btn" onClick={handleClick}>
         로그인
@@ -77,7 +77,7 @@ export default function Login() {
     </div>
     <button class="google__btn">
       <i class="fa fa-google"></i>
-      Sign in with Google
+      구글로그인
     </button>
   </div>
    )

@@ -3,19 +3,24 @@ package com.example.nutrition.domain;
 import com.azure.storage.blob.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import marvin.image.MarvinImage;
+import org.imgscalr.Scalr;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.marvinproject.image.transform.scale.Scale;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 import org.mindrot.jbcrypt.BCrypt;
 import java.io.BufferedReader;
@@ -71,7 +76,6 @@ public class UserService {
     }
 
     public void uploadImage(MultipartFile file, String id) throws IOException, InterruptedException {
-
         String containerName = "nutrition";
         UUID uuid = UUID.randomUUID();
         String blobFileName = id + "#" + uuid;
@@ -90,13 +94,16 @@ public class UserService {
 
             BlobClient blobClient = containerClient.getBlobClient(blobFileName);
 
-            InputStream fileInputStream = file.getInputStream();
+            MultipartFile resizedFile = resizeImage(file, 1024, 1024);
+            InputStream fileInputStream = resizedFile.getInputStream();
 
             blobClient.upload(fileInputStream);
             file_url = blobClient.getBlobUrl();
             System.out.println(file_url);
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
         StringBuffer result = run_clova(file_url, apiURL, secretKey);
         ArrayList<Float> array = preprocessing(result);
@@ -203,23 +210,48 @@ public class UserService {
                 for (int i = 0; i < fieldsArray.length(); i++) {
                     JSONObject field = fieldsArray.getJSONObject(i);
                     String inferText = field.getString("inferText");
+
                     if(inferText.contains(nutirition)){
                         if(inferText.split(" ").length > 1) {
                             list.add(inferText.split(" ")[1]);
                             break;
                         }
-
                         else {
+                            if (inferText.length() > nutirition.length()){
+                                int start_index = inferText.indexOf(nutirition);
+                                if (start_index != -1) {
+                                    // 타겟 문자열 뒤의 문자열을 추출
+                                    if(inferText.contains("g")){
+                                        int end_index = inferText.indexOf("g");
+                                        String temp = inferText.substring(start_index + nutirition.length(), end_index).trim();
+                                        list.add(temp);
+                                        break;
+                                    }
+                                    String temp = inferText.substring(start_index + nutirition.length()).trim();
+                                    list.add(temp);
+                                    break;
+                                }
+                            }
                             if (nutirition.equals("kcal")) {
                                 JSONObject temp_field = fieldsArray.getJSONObject(i-1);
                                 String temp = temp_field.getString("inferText");
-                                list.add(temp);
+                                if(temp.split(" ").length > 1){
+                                    list.add(temp.split(" ")[0]);
+                                }
+                                else{
+                                    list.add(temp);
+                                }
                                 break;
                             }
                             else {
                                 JSONObject temp_field = fieldsArray.getJSONObject(i+1);
                                 String temp = temp_field.getString("inferText");
-                                list.add(temp);
+                                if(temp.split(" ").length > 1){
+                                    list.add(temp.split(" ")[0]);
+                                }
+                                else{
+                                    list.add(temp);
+                                }
                                 break;
                             }
                         }
@@ -232,9 +264,13 @@ public class UserService {
                         }
                     }
                 System.out.println(list);
+
                 for(String nutrition : list) {
                     if(nutrition.contains("g")){
                         String temp = nutrition.replace("g", "");
+                        nutrition_array.add(Float.valueOf(temp));
+                    } else if (nutrition.contains("/")) {
+                        String temp = nutrition.replace("/", "");
                         nutrition_array.add(Float.valueOf(temp));
                     }
                     else{
@@ -366,6 +402,27 @@ public class UserService {
             System.out.println(result);
             return result;
         }
+
+    MultipartFile resizeImage(MultipartFile file, int width, int height) throws Exception {
+        // resize에 들어가는 속성을 변경해서 여러 모드로 변경해줄수있다
+        BufferedImage originalImage = ImageIO.read(file.getInputStream());
+
+        // Scalr 라이브러리를 이용해 이미지 리사이징
+        BufferedImage resizedImage = Scalr.resize(originalImage, Scalr.Method.QUALITY, width, height);
+
+        // BufferedImage를 byte[]로 변환
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(resizedImage, "jpg", baos);
+        byte[] imageBytes = baos.toByteArray();
+
+        // byte[]를 MultipartFile로 변환하여 반환
+        return new MockMultipartFile(
+                file.getName(),                 // 파일 필드 이름
+                file.getOriginalFilename(),      // 원본 파일 이름
+                file.getContentType(),           // 파일 Content-Type
+                new ByteArrayInputStream(imageBytes) // 파일 데이터
+        );
     }
+}
 
 

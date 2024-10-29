@@ -6,7 +6,6 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './components/Login';
 import SignUp from './components/SignUp';
 import Main from './components/Main';
-import MyPage from './components/MyPage';
 import NotFound from './components/NotFound';
 import Dashboard from './components/Dashboard';
 import Goal from './components/Goal';
@@ -23,7 +22,6 @@ const router = createBrowserRouter([
       {path: 'login', element: <Login/>},
       {path: 'signup', element: <SignUp/>},
       {path: 'main', element: <Main/>},
-      {path: 'mypage', element: <MyPage/>},
       {path: 'dashboard', element: <Dashboard/>},
       {path: 'goal', element: <Goal/>},
       {path: 'upload', element: <Upload/>},

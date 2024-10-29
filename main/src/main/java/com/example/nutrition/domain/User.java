@@ -19,4 +19,6 @@ public class User {
 
     private String loginId;
     private String password;
+    private String gender;
+    private int weight;
 }

@@ -18,12 +18,20 @@ public class JoinRequest {
     @NotBlank(message = "비밀번호가 비어있습니다.")
     private String password;
 
+    @NotBlank(message = "성별이 비어있습니다.")
+    private String gender;
+
+    @NotBlank(message = "체중이 비어있습니다.")
+    private int weight;
+
     public User toEntity() {
         String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt(10));
         System.out.println(hashedPassword);
         return User.builder()
                 .loginId(this.loginId)
                 .password(hashedPassword)
+                .gender(this.gender)
+                .weight(this.weight)
                 .build();
     }
 }

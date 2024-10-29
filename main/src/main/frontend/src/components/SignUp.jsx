@@ -8,6 +8,8 @@ export default function SignUp() {
   const [id, setId] = useState('');
   const [pw, setPw] = useState('');
   const [pwCheck, setPwCheck] = useState('');
+  const [selectedOption, setSelectedOption] = useState('');
+  const [weight, setWeight] = useState(0);
   const { isLoggedIn, changeLogin, signUp, login, logout, user} = useLogin()
 
   const saveUserId = event => {
@@ -21,6 +23,10 @@ export default function SignUp() {
   const saveUserPwCheck = event => {
     setPwCheck(event.target.value);
   };
+
+  const saveUserWeight = event => {
+    setWeight(event.target.value);
+  }
 
   const handleClick = (e) => {
     e.preventDefault()
@@ -36,6 +42,10 @@ export default function SignUp() {
       signUp(id,pw)
     }
   }
+
+  const handleChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const checkBlank = () => {
     if (id == "" || pw == "" || pwCheck == ""){
@@ -71,12 +81,37 @@ export default function SignUp() {
     
       <form action="">
       <div class="first-input input__block first-input__block">
-         <input placeholder="Id" class="input" id="email" value={id} onChange={saveUserId}/>
+         <input placeholder="아이디" class="input" id="email" value={id} onChange={saveUserId}/>
       </div>
       <div class="input__block">
-         <input type="password" placeholder="Password" class="input" id="password" value={pw} onChange={saveUserPw}/>
-         <input type="password" placeholder="PasswordCheck" class="input" id="password" value={pwCheck} onChange={saveUserPwCheck} onKeyDown={(e) => activeEnter(e)}/>
+         <input type="password" placeholder="비밀번호" class="input" id="password" value={pw} onChange={saveUserPw}/>
+         <input type="password" placeholder="비밀번호확인" class="input" id="password" value={pwCheck} onChange={saveUserPwCheck} onKeyDown={(e) => activeEnter(e)}/>
+         <input placeholder="체중" class="input" value={weight} onChange={saveUserWeight}/>
+         
       </div>
+      <div className='radio-group-parent'>
+      <h4>성별:</h4>
+      <div className="radio-group">
+        <label>
+          <input
+            type="radio"
+            value="option1"
+            checked={selectedOption === 'option1'}
+            onChange={handleChange}
+          />
+          남자
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="option2"
+            checked={selectedOption === 'option2'}
+            onChange={handleChange}
+          />
+          여자
+        </label>
+      </div>
+    </div>
       <button class="signin__btn" onClick={handleClick}>
         회원가입
       </button>
@@ -86,7 +121,7 @@ export default function SignUp() {
     </div>
     <button class="google__btn">
       <i class="fa fa-google"></i>
-      Sign up with Google
+      구글로그인 
     </button>
   </div>
   )
