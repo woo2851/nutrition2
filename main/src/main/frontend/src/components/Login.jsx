@@ -44,7 +44,8 @@ export default function Login() {
   }
 
    return (
-    <div class="container">
+    <div class="main-container">
+      <div class="container">
     
     <h1 className='login_h1'>로그인</h1>
     
@@ -71,13 +72,13 @@ export default function Login() {
         로그인
       </button>
       </form>
-    <div class="separator">
-      <p>OR</p>
-    </div>
+    
     <button class="google__btn">
       <i class="fa fa-google"></i>
       구글로그인
     </button>
   </div>
+    </div>
+    
    )
 }

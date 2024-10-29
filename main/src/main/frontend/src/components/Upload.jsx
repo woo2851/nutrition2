@@ -32,7 +32,9 @@ export default function Upload() {
       }
 
     return (
-    <div className='upload_container'>
+      <div>
+        <h2 className='upload_h2'>File Upload</h2>
+        <div className='upload_container'>
       <div className='upload'>
         <input type="file" onChange={handleFileChange} id="avatar" name="file" accept="image/png, image/jpeg, image/jpg"/>
         <div className='preview_description'>
@@ -49,6 +51,8 @@ export default function Upload() {
     <img className='image' src="image/cocoa2.jpg" alt="" />
     </div>
     </div>
+      </div>
     
+  
   )
 }
