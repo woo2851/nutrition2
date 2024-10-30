@@ -28,6 +28,7 @@ public class NutritionController {
 
     @GetMapping("/all/{id}")
     public ArrayList<ArrayList> getNutritionAll(@PathVariable String id) {
+        System.out.println("all");
         return this.userService.getNutritionAll(id);
     }
 }
