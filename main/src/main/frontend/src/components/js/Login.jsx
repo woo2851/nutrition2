@@ -65,7 +65,7 @@ export default function Login() {
       <div class="first-input input__block first-input__block">
          <input placeholder="아이디" class="input" id="email" value={id} onChange={saveUserId}/>
       </div>
-      <div class="input__block">
+      <div class="input__block"> 
          <input type="password" placeholder="비밀번호" class="input" id="password" value={pw} onChange={saveUserPw} onKeyDown={(e) => activeEnter(e)}   />
       </div>
       <button class="signin__btn" onClick={handleClick}>

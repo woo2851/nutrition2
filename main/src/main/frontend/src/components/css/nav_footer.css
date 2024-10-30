@@ -24,10 +24,27 @@ button {
   
     transition: 0.5s;
 
-    background-color: seashell;
-
-    
+    background-color: #00bf63;
+    color: white;
+    font-weight: bold;
+    width: 350px;
+    height: 45px;
 }
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25vh;
+}
+
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+  }
 
 .nav {
     display: flex;
@@ -105,9 +122,19 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 550px;
-    border: 2px solid black;
-    border-radius: 20px;
+    width: 500px; 
+    height: 400px;
+    border: 2px dashed #616161;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    margin-right: -20px;
+    
+}
+
+.file_preview img {
+    max-width: 100%; /* 컨테이너의 너비에 맞춤 */
+    max-height: 100%; /* 컨테이너의 높이에 맞춤 */
+    object-fit: contain; /* 비율을 유지하면서 컨테이너 안에 맞춤 */
 }
 
 .preview_description {
@@ -119,9 +146,14 @@ button {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    border: 2px solid black;
-    border-radius: 20px;
+    width: 300px; 
+    height: 400px;
+    justify-content: center; /*가로축 방향에 위치*/
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    padding: 20px;
+    margin-left: -120px;
 }
 
 .spinner_div{
@@ -175,5 +207,13 @@ button {
 
 .upload_h2{
     text-align: center;
-    
+    margin-bottom: 10px;
+}
+
+.upload_line {
+    border-bottom: 2px solid #B7B7B7; /* 선 추가 */
+    width: 800px; /* 원하는 선 길이 */
+    padding-bottom: 30px; /* 텍스트와 선 사이의 간격 */
+    margin: 0 auto; /* 가운데 정렬 */
+    margin-bottom: 40px; /* 선 아래에 간격 추가 */
 }
