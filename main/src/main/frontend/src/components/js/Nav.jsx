@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import "./nav_footer.css"
-import { useLogin } from './context/LoginContext'
+import "../css/nav_footer.css"
+import { useLogin } from '../context/LoginContext'
 
 export default function Nav() {
 

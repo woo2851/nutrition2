@@ -24,7 +24,7 @@ export default class UserService{
       await axios.post(`http://localhost:9001/signup/${loginId}`, {
         loginId: loginId,
         password: password,
-        gedner: gender,
+        gender: gender,
         weight: weight
       })
       .then((res) => {return res}))
@@ -46,6 +46,15 @@ export default class UserService{
     try {
       return(
       await axios.get(`http://localhost:9001/getNutrition/${id}/${nutrition}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
+
+  async getNutritionDaily(id){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/daily/${id}`).then((res) => {return res}));
     } catch (error) {
       console.error('Error getting nutrition:', error);
     }

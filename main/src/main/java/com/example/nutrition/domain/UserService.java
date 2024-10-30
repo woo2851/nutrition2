@@ -347,6 +347,63 @@ public class UserService {
             return result;
         }
 
+    public ArrayList<Float> getNutritionDaily(String id){
+        ArrayList<Float> nutrition_value = new ArrayList<>();
+        ArrayList<String> nutrition_list = new ArrayList<>(List.of("kcal", "carb", "sugar", "fat", "protein"));
+        List<UserNutrition> users = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
+
+
+        if (users.isEmpty()){
+            ArrayList<Float> temp = new ArrayList<>(List.of(0F, 0F, 0F, 0F, 0F));
+            return temp;
+        }
+
+        for(String nutrition : nutrition_list){
+            if(nutrition.equals("kcal")){
+                Float kcal = (float) 0;
+                for(int i = 0; i < users.size(); i++){
+                    UserNutrition userNutrition = users.get(i);
+                    kcal += userNutrition.getKcal();
+                }
+                nutrition_value.add(kcal);
+            }
+            else if(nutrition.equals("carb")){
+                Float carb = (float) 0;
+                for(int i = 0; i < users.size(); i++){
+                    UserNutrition userNutrition = users.get(i);
+                    carb += userNutrition.getCarb();
+                }
+                nutrition_value.add(carb);
+            }
+            else if(nutrition.equals("sugar")){
+                Float sugar = (float) 0;
+                for(int i = 0; i < users.size(); i++){
+                    UserNutrition userNutrition = users.get(i);
+                    sugar += userNutrition.getSugar();
+                }
+                nutrition_value.add(sugar);
+            }
+            else if(nutrition.equals("fat")){
+                Float fat = (float) 0;
+                for(int i = 0; i < users.size(); i++){
+                    UserNutrition userNutrition = users.get(i);
+                    fat += userNutrition.getFat();
+                }
+                nutrition_value.add(fat);
+            }
+            else if(nutrition.equals("protein")){
+                Float protein = (float) 0;
+                for(int i = 0; i < users.size(); i++){
+                    UserNutrition userNutrition = users.get(i);
+                    protein += userNutrition.getProtein();
+                }
+                nutrition_value.add(protein);
+            }
+        }
+        System.out.println(nutrition_value);
+        return nutrition_value;
+    }
+
         public ArrayList<ArrayList> getNutritionAll(String id) {
             ArrayList<ArrayList> result = new ArrayList<>();
             ArrayList<LocalDate> temp_date = new ArrayList<>();
