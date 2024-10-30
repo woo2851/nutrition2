@@ -1,5 +1,5 @@
 import React from 'react';
-import './nav_footer.css'
+import '../css/nav_footer.css'
 
 const Spinner = () => {
   return (

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Chart from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
-import { useLogin } from './context/LoginContext'
-import './nav_footer.css'
+import { useLogin } from '../context/LoginContext'
+import '../css/nav_footer.css'
 
 export default function Dashboard() {
 

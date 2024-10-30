@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;
@@ -346,6 +347,103 @@ public class UserService {
             System.out.println(result);
             return result;
         }
+
+    public ArrayList<ArrayList> getNutritionDaily(String id){
+        ArrayList<ArrayList> result = new ArrayList<ArrayList>();
+        ArrayList<Float> nutrition_value = new ArrayList<>();
+        ArrayList<String> nutrition_list = new ArrayList<>(List.of("kcal", "carb", "sugar", "fat", "protein"));
+        Optional<User> user = this.userRepository.findByLoginId(id);
+        List<UserNutrition> nutritions = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
+
+
+        if (nutritions.isEmpty()){
+            ArrayList<Float> zero_list = new ArrayList<>(List.of(0F, 0F, 0F, 0F, 0F));
+            result.add(zero_list);
+
+            if(!user.isEmpty()){
+                ArrayList<Float> temp_list = new ArrayList<Float>();
+                User temp = user.get();
+                if(temp.getGender().equals("male")){
+                    temp_list.add(1650F);
+                }
+                else{
+                    temp_list.add(1350F);
+                }
+                temp_list.add(100F);
+                temp_list.add(65F);
+                temp_list.add((float) (0.8 * temp.getWeight()));
+                temp_list.add((float) temp.getWeight());
+                temp_list.add(65F);
+                result.add(temp_list);
+            }
+            return result;
+        }
+
+        for(String nutrition : nutrition_list){
+            if(nutrition.equals("kcal")){
+                Float kcal = (float) 0;
+                for(int i = 0; i < nutritions.size(); i++){
+                    UserNutrition userNutrition = nutritions.get(i);
+                    kcal += userNutrition.getKcal();
+                }
+                nutrition_value.add(kcal);
+            }
+            else if(nutrition.equals("carb")){
+                Float carb = (float) 0;
+                for(int i = 0; i < nutritions.size(); i++){
+                    UserNutrition userNutrition = nutritions.get(i);
+                    carb += userNutrition.getCarb();
+                }
+                nutrition_value.add(carb);
+            }
+            else if(nutrition.equals("sugar")){
+                Float sugar = (float) 0;
+                for(int i = 0; i < nutritions.size(); i++){
+                    UserNutrition userNutrition = nutritions.get(i);
+                    sugar += userNutrition.getSugar();
+                }
+                nutrition_value.add(sugar);
+            }
+            else if(nutrition.equals("fat")){
+                Float fat = (float) 0;
+                for(int i = 0; i < nutritions.size(); i++){
+                    UserNutrition userNutrition = nutritions.get(i);
+                    fat += userNutrition.getFat();
+                }
+                nutrition_value.add(fat);
+            }
+            else if(nutrition.equals("protein")){
+                Float protein = (float) 0;
+                for(int i = 0; i < nutritions.size(); i++){
+                    UserNutrition userNutrition = nutritions.get(i);
+                    protein += userNutrition.getProtein();
+                }
+                nutrition_value.add(protein);
+            }
+        }
+
+        System.out.println(nutrition_value);
+        result.add(nutrition_value);
+
+        if(!user.isEmpty()){
+            ArrayList<Float> temp_list = new ArrayList<Float>();
+            User temp = user.get();
+            if(temp.getGender().equals("male")){
+                temp_list.add(1650F);
+            }
+            else{
+                temp_list.add(1350F);
+            }
+            temp_list.add(100F);
+            temp_list.add(65F);
+            temp_list.add((float) (0.8 * temp.getWeight()));
+            temp_list.add((float) temp.getWeight());
+            temp_list.add(65F);
+            result.add(temp_list);
+        }
+
+        return result;
+    }
 
         public ArrayList<ArrayList> getNutritionAll(String id) {
             ArrayList<ArrayList> result = new ArrayList<>();

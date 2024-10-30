@@ -1,7 +1,7 @@
 import React, { useState }  from 'react'
-import { useLogin } from './context/LoginContext'
+import { useLogin } from '../context/LoginContext'
 import { useNavigate } from 'react-router-dom'
-import "./nav_footer.css"
+import "../css/nav_footer.css"
 
 export default function Upload() {
 

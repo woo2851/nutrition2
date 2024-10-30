@@ -3,14 +3,14 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Login from './components/Login';
-import SignUp from './components/SignUp';
-import Main from './components/Main';
-import NotFound from './components/NotFound';
-import Dashboard from './components/Dashboard';
-import Goal from './components/Goal';
-import Upload from './components/Upload';
-import Spinner from './components/Spinner';
+import Login from './components/js/Login';
+import SignUp from './components/js/SignUp';
+import Main from './components/js/Main';
+import NotFound from './components/js/NotFound';
+import Dashboard from './components/js/Dashboard';
+import Goal from './components/js/Goal';
+import Upload from './components/js/Upload';
+import Spinner from './components/js/Spinner';
 
 const router = createBrowserRouter([
   {

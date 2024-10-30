@@ -95,13 +95,18 @@ export const LoginProvider = ({ children }) => {
     }
   }
 
+  const getNutritionDailyContext = async (user) => {
+    const result = await user.getNutritionDaily(user.id)
+    return result.data
+  }
+
   const getNutritionAllContext = async (user) => {
     const result = await user.getNutritionAll(user.id)
     return result.data
   }
 
   return (
-    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, setUser}}>
+    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser}}>
       {children}
     </LoginContext.Provider>
   );

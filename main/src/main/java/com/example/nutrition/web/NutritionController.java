@@ -20,9 +20,14 @@ public class NutritionController {
         return this.userService.getNutrition(id, nutrition);
     }
 
+    @GetMapping("/daily/{id}")
+    public ArrayList<ArrayList> getNutritionDailyAll(@PathVariable String id) {
+        System.out.println("daily");
+        return this.userService.getNutritionDaily(id);
+    }
+
     @GetMapping("/all/{id}")
     public ArrayList<ArrayList> getNutritionAll(@PathVariable String id) {
-        System.out.println("all");
         return this.userService.getNutritionAll(id);
     }
 }

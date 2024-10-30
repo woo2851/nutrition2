@@ -1,7 +1,7 @@
 import React, { useState} from 'react'
 import { Link } from 'react-router-dom';
-import { useLogin } from './context/LoginContext';
-import './login_signup.css'
+import { useLogin } from '../context/LoginContext';
+import '../css/login_signup.css'
 
 export default function Login() {
 
