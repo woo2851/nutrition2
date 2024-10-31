@@ -2,6 +2,8 @@ import React, { useState} from 'react'
 import { Link } from 'react-router-dom';
 import { useLogin } from '../context/LoginContext';
 import '../css/login_signup.css'
+import '@fortawesome/fontawesome-free/css/all.min.css';
+// npm install @fortawesome/react-fontawesome @fortawesome/free-brands-svg-icons 아이콘 설치했음
 
 export default function Login() {
 
@@ -74,9 +76,9 @@ export default function Login() {
       </form>
     
     <button class="google__btn">
-      <i class="fa fa-google"></i>
+      <i class="fab fa-google"></i>
       구글로그인
-    </button>
+    </button> 
   </div>
     </div>
     

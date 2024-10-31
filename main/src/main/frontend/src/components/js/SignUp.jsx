@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import '../css/login_signup.css'
 import { Link } from 'react-router-dom';
 import { useLogin } from '../context/LoginContext';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 export default function SignUp() {
 
@@ -116,7 +117,7 @@ export default function SignUp() {
   </button>
 </form>
 <button class="google__btn">
-  <i class="fa fa-google"></i>
+  <i class="fab fa-google"></i>
   구글로그인
 </button>
 </div>
