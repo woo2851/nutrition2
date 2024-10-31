@@ -120,7 +120,7 @@ return (
       <option value="지방">지방</option>
       <option value="단백질">단백질</option>
   </select>
-  <button onClick={getNutrition}>검색</button>
+  <button className='small-button' onClick={getNutrition}>검색</button> 
     </div>
     <div className='chart'>
         <Line type="line" data={chartData} options={chartOptions}/>
