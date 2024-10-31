@@ -12,10 +12,20 @@
     align-items: center;
 }
 
-h2 {
+/* h2 {
     margin-bottom: 0%;
-}
+} */
 
 .main_button{
     background-color: #00bf63;
+}
+
+.footer{
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    height: 20px;
+    width: 1750px;
+    text-align: center;
+    color: lightgray;
 }
