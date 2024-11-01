@@ -1,6 +1,6 @@
 package com.example.nutrition.web;
 
-import com.example.nutrition.domain.UserService;
+import com.example.nutrition.domain.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

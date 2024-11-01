@@ -1,5 +1,6 @@
-package com.example.nutrition.domain;
+package com.example.nutrition.domain.dto;
 
+import com.example.nutrition.domain.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

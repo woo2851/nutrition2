@@ -101,7 +101,6 @@ button {
 }
 
 .nav_user_name {
-    margin-right: 40px;
     margin-top: 40px;
 }
 
@@ -250,4 +249,52 @@ button {
     padding-bottom: 30px; /* 텍스트와 선 사이의 간격 */
     margin: 0 auto; /* 가운데 정렬 */
     margin-bottom: 40px; /* 선 아래에 간격 추가 */
+}
+
+.logout_button{
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    margin: 0;
+    margin-left: 15px;
+    padding: 0.5rem 1rem;
+  
+    font-family: "Noto Sans KR", sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    text-align: center;
+    text-decoration: none;
+  
+    display: inline-block;
+    width: auto;
+  
+    border: none;
+    border-radius: 4px;
+
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    cursor: pointer;
+  
+    transition: 0.5s;
+
+    background-color: #00bf63; 
+    color: white;
+    font-weight: bold;
+    width: 120px; 
+    height: 40px;
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+.dashboard_label {
+    padding-right: 10px;
+}
+
+h5 {
+    margin-right: 200px;
+}
+
+input {
+    margin-left: 5px;
 }

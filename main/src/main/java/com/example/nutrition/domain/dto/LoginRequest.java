@@ -1,4 +1,4 @@
-package com.example.nutrition.domain;
+package com.example.nutrition.domain.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

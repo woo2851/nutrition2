@@ -5,10 +5,9 @@ import { useLogin } from '../context/LoginContext'
 
 export default function Nav() {
 
-  const { isLoggedIn, user} = useLogin()
+  const { isLoggedIn, user, logout} = useLogin()
 
   if (isLoggedIn === true) {
-    console.log(user)
     return (
       <div className='nav'>
         <Link to = '/main' className="link">
@@ -22,7 +21,7 @@ export default function Nav() {
       </div>
       <div className='nav_user'>
       <h4 className='nav_user_name'>{user.id}님</h4>
-      {/* <button onClick={logout}>로그아웃</button> */}
+      <button className="logout_button" onClick={logout}>로그아웃</button> 
       </div>
       </div>
     )

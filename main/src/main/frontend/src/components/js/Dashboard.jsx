@@ -112,8 +112,8 @@ export default function Dashboard() {
 return (
   <div className='dashboard'>
     <div className='dashboard_search'>
-    <label for="fruits">영양소를 선택하세요:</label>
-  <select value={selectedOption} onChange={handleSelectChange}>
+    <label className='dashboard_label' for="fruits">영양소를 선택하세요</label>
+  <select className='dashboard_select' value={selectedOption} onChange={handleSelectChange}>
       <option value="kcal">kcal</option>
       <option value="탄수화물">탄수화물</option>
       <option value="당류">당류</option>

@@ -1,6 +1,12 @@
-package com.example.nutrition.domain;
+package com.example.nutrition.domain.service;
 
 import com.azure.storage.blob.*;
+import com.example.nutrition.domain.entity.User;
+import com.example.nutrition.domain.entity.UserNutrition;
+import com.example.nutrition.domain.dto.JoinRequest;
+import com.example.nutrition.domain.dto.LoginRequest;
+import com.example.nutrition.domain.repository.UserNutritionRepository;
+import com.example.nutrition.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.imgscalr.Scalr;
@@ -13,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.LocalDate;

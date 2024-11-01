@@ -1,8 +1,8 @@
 package com.example.nutrition.web;
 
-import com.example.nutrition.domain.JoinRequest;
-import com.example.nutrition.domain.LoginRequest;
-import com.example.nutrition.domain.UserService;
+import com.example.nutrition.domain.dto.JoinRequest;
+import com.example.nutrition.domain.dto.LoginRequest;
+import com.example.nutrition.domain.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

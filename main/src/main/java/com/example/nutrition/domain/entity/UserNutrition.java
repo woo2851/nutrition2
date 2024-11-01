@@ -1,4 +1,4 @@
-package com.example.nutrition.domain;
+package com.example.nutrition.domain.entity;
 
 
 import jakarta.persistence.*;
