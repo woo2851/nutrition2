@@ -15,7 +15,7 @@ public class ImageController {
     private final UserService userService;
 
     @PostMapping("/{id}")
-    public void uploadImage(@RequestParam("file") MultipartFile file, @PathVariable String id) throws IOException, InterruptedException {
-        this.userService.uploadImage(file, id);
+    public boolean uploadImage(@RequestParam("file") MultipartFile file, @PathVariable String id) throws IOException, InterruptedException {
+        return this.userService.uploadImage(file, id);
     }
 }

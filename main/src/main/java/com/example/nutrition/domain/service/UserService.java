@@ -79,7 +79,7 @@ public class UserService {
         return user.getLoginId();
     }
 
-    public void uploadImage(MultipartFile file, String id) throws IOException, InterruptedException {
+    public boolean uploadImage(MultipartFile file, String id) throws IOException, InterruptedException {
         String containerName = "nutrition";
         UUID uuid = UUID.randomUUID();
         String blobFileName = id + "#" + uuid;
@@ -104,43 +104,46 @@ public class UserService {
             blobClient.upload(fileInputStream);
             file_url = blobClient.getBlobUrl();
             System.out.println(file_url);
+
+            StringBuffer result = run_clova(file_url, apiURL, secretKey);
+            ArrayList<Float> array = preprocessing(result);
+            UserNutrition temp = UserNutrition.builder()
+                    .userId(id)
+                    .kcal(array.get(0))
+                    .carb(array.get(1))
+                    .sugar(array.get(2))
+                    .Fat(array.get(3))
+                    .protein(array.get(4))
+                    .imageurl(file_url)
+                    .date(LocalDate.now())
+                    .build();
+            this.userNutritionRepository.save(temp);
+            List<UserNutrition> user_nutrition_list = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
+            Float kcal = (float) 0;
+            Float carb = (float) 0;
+            Float sugar = (float) 0;
+            Float Fat = (float) 0;
+            Float protein = (float) 0;
+            for (int i = 0; i < user_nutrition_list.size(); i++) {
+                UserNutrition userNutrition = user_nutrition_list.get(i);
+                kcal += userNutrition.getKcal();
+                carb += userNutrition.getCarb();
+                sugar += userNutrition.getSugar();
+                Fat += userNutrition.getFat();
+                protein += userNutrition.getProtein();
+            }
+            System.out.println("kcal : " + kcal);
+            System.out.println("carb : " + carb);
+            System.out.println("sugar : " + sugar);
+            System.out.println("fat : " + Fat);
+            System.out.println("protein : " + protein);
+            return true;
         } catch (IOException e) {
             e.printStackTrace();
+            return false;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        StringBuffer result = run_clova(file_url, apiURL, secretKey);
-        ArrayList<Float> array = preprocessing(result);
-        UserNutrition temp = UserNutrition.builder()
-                .userId(id)
-                .kcal(array.get(0))
-                .carb(array.get(1))
-                .sugar(array.get(2))
-                .Fat(array.get(3))
-                .protein(array.get(4))
-                .imageurl(file_url)
-                .date(LocalDate.now())
-                .build();
-        this.userNutritionRepository.save(temp);
-        List<UserNutrition> user_nutrition_list =  this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
-        Float kcal  = (float) 0;
-        Float carb = (float) 0;
-        Float sugar = (float) 0;
-        Float Fat = (float) 0;
-        Float protein = (float) 0;
-        for(int i = 0; i < user_nutrition_list.size(); i++){
-            UserNutrition userNutrition = user_nutrition_list.get(i);
-            kcal += userNutrition.getKcal();
-            carb += userNutrition.getCarb();
-            sugar += userNutrition.getSugar();
-            Fat += userNutrition.getFat();
-            protein += userNutrition.getProtein();
-        }
-        System.out.println("kcal : " + kcal);
-        System.out.println("carb : " +carb);
-        System.out.println("sugar : " +sugar);
-        System.out.println("fat : " + Fat);
-        System.out.println("protein : " +protein);
     }
 
     public StringBuffer run_clova(String file_url, String apiURL, String secretKey) {

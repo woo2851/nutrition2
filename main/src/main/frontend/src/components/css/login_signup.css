@@ -274,7 +274,7 @@ label {
 }
 
 .table-container {
-  margin: 20px;
+  margin: 20px 0;
 }
 
 .styled-table {
@@ -315,6 +315,8 @@ label {
 .description {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  margin-top: 50px;
   width: 600px;
 }
 

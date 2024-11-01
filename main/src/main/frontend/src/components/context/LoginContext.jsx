@@ -59,9 +59,10 @@ export const LoginProvider = ({ children }) => {
   const uploadFile = async (user, formData) => {
     try{
       const result = await user.uploadFile(user.id, formData)
-      console.log(result)
-      navigate("/upload")
-      alert("업로드 성공!")
+      if(result.data === true){
+        navigate("/upload")
+        alert("업로드 성공!")
+      }
     }
     catch(e){
       navigate("/upload")
