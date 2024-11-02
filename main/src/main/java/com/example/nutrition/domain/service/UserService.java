@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 import java.io.*;
@@ -225,24 +227,62 @@ public class UserService {
                         }
                         else {
                             if (inferText.length() > nutirition.length()){
-                                int start_index = inferText.indexOf(nutirition);
-                                if (start_index != -1) {
+                                int start_index_1 = inferText.indexOf(nutirition);
+                                if (start_index_1 != -1) {
                                     // 타겟 문자열 뒤의 문자열을 추출
                                     if(inferText.contains("g")){
                                         int end_index = inferText.indexOf("g");
-                                        String temp = inferText.substring(start_index + nutirition.length(), end_index).trim();
+                                        String temp = inferText.substring(start_index_1 + nutirition.length(), end_index).trim();
                                         list.add(temp);
                                         break;
                                     }
-                                    String temp = inferText.substring(start_index + nutirition.length()).trim();
-                                    list.add(temp);
-                                    break;
+                                    else{
+                                        if (nutirition.equals("kcal")) {
+                                            JSONObject temp_field = fieldsArray.getJSONObject(i-1);
+                                            String temp = temp_field.getString("inferText");
+                                            System.out.println("-------------" + temp);
+
+                                            if(temp.trim().contains("당")){
+                                                int start_index = inferText.indexOf("당");
+                                                String temp_index = inferText.trim().substring(start_index+1);
+                                                list.add(temp_index);
+                                            }
+                                            else if(temp.split(" ").length > 1){
+                                                list.add(temp.split(" ")[0]);
+                                            }
+                                            else{
+                                                list.add(temp);
+                                            }
+                                            break;
+                                        }
+                                        else{
+                                            JSONObject temp_field = fieldsArray.getJSONObject(i+1);
+                                            String temp = temp_field.getString("inferText");
+                                            if(temp.split(" ").length > 1){
+                                                list.add(temp.split(" ")[0]);
+                                            }
+                                            else{
+                                                list.add(temp);
+                                            }
+                                            break;
+                                        }
+                                    }
+//                                    String temp = inferText.substring(start_index + nutirition.length()).trim();
+//                                    list.add(temp);
+//                                    break;
                                 }
                             }
                             if (nutirition.equals("kcal")) {
                                 JSONObject temp_field = fieldsArray.getJSONObject(i-1);
                                 String temp = temp_field.getString("inferText");
-                                if(temp.split(" ").length > 1){
+                                System.out.println("-------------" + temp);
+
+                                if(temp.trim().contains("당")){
+                                    int start_index = inferText.indexOf("당");
+                                    String temp_index = inferText.trim().substring(start_index+1);
+                                    list.add(temp_index);
+                                }
+                                else if(temp.split(" ").length > 1){
                                     list.add(temp.split(" ")[0]);
                                 }
                                 else{
@@ -274,10 +314,14 @@ public class UserService {
 
                 for(String nutrition : list) {
                     if(nutrition.contains("g")){
-                        String temp = nutrition.replace("g", "");
+                        int end_index = nutrition.indexOf("g");
+                        String temp = nutrition.substring(0, end_index);
                         nutrition_array.add(Float.valueOf(temp));
                     } else if (nutrition.contains("/")) {
                         String temp = nutrition.replace("/", "");
+                        nutrition_array.add(Float.valueOf(temp));
+                    } else if (nutrition.contains("%")) {
+                        String temp = nutrition.replace("%", "");
                         nutrition_array.add(Float.valueOf(temp));
                     }
                     else{

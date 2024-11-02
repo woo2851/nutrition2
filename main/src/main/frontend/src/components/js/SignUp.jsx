@@ -49,7 +49,7 @@ export default function SignUp() {
   };
 
   const checkBlank = () => {
-    if (id === "" || pw === "" || pwCheck === "" || weight === "") {
+    if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "") {
       return true
     }
     else {
