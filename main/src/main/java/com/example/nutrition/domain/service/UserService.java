@@ -18,9 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -88,7 +85,7 @@ public class UserService {
         String containerName = "nutrition";
         UUID uuid = UUID.randomUUID();
         String blobFileName = id + "#" + uuid;
-        String file_url = "";
+        String file_url;
 
         try {
             BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
@@ -103,7 +100,7 @@ public class UserService {
 
             BlobClient blobClient = containerClient.getBlobClient(blobFileName);
 
-            MultipartFile resizedFile = resizeImage(file, 1024, 1024);
+            MultipartFile resizedFile = resizeImage(file, 850, 850);
             InputStream fileInputStream = resizedFile.getInputStream();
 
             blobClient.upload(fileInputStream);
@@ -123,25 +120,6 @@ public class UserService {
                     .date(LocalDate.now())
                     .build();
             this.userNutritionRepository.save(temp);
-            List<UserNutrition> user_nutrition_list = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
-            Float kcal = (float) 0;
-            Float carb = (float) 0;
-            Float sugar = (float) 0;
-            Float Fat = (float) 0;
-            Float protein = (float) 0;
-            for (int i = 0; i < user_nutrition_list.size(); i++) {
-                UserNutrition userNutrition = user_nutrition_list.get(i);
-                kcal += userNutrition.getKcal();
-                carb += userNutrition.getCarb();
-                sugar += userNutrition.getSugar();
-                Fat += userNutrition.getFat();
-                protein += userNutrition.getProtein();
-            }
-            System.out.println("kcal : " + kcal);
-            System.out.println("carb : " + carb);
-            System.out.println("sugar : " + sugar);
-            System.out.println("fat : " + Fat);
-            System.out.println("protein : " + protein);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -220,95 +198,67 @@ public class UserService {
 
             for (String nutirition : nutrition_list) {
                 for (int i = 0; i < fieldsArray.length(); i++) {
+                    System.out.println(i);
                     JSONObject field = fieldsArray.getJSONObject(i);
-                    String inferText = field.getString("inferText");
+                    String inferText = field.getString("inferText").trim();
 
-                    if(inferText.contains(nutirition)){
-                        if(inferText.split(" ").length > 1) {
-                            list.add(inferText.split(" ")[1]);
-                            break;
-                        }
-                        else {
-                            if (inferText.length() > nutirition.length()){
-                                int start_index_1 = inferText.indexOf(nutirition);
-                                if (start_index_1 != -1) {
-                                    // 타겟 문자열 뒤의 문자열을 추출
-                                    if(inferText.contains("g")){
-                                        int end_index = inferText.indexOf("g");
-                                        String temp = inferText.substring(start_index_1 + nutirition.length(), end_index).trim();
-                                        list.add(temp);
-                                        break;
-                                    }
-                                    else{
-                                        if (nutirition.equals("kcal")) {
-                                            JSONObject temp_field = fieldsArray.getJSONObject(i-1);
-                                            String temp = temp_field.getString("inferText");
-                                            System.out.println("-------------" + temp);
-
-                                            if(temp.trim().contains("당")){
-                                                int start_index = inferText.indexOf("당");
-                                                String temp_index = inferText.trim().substring(start_index+1);
-                                                list.add(temp_index);
-                                            }
-                                            else if(temp.split(" ").length > 1){
-                                                list.add(temp.split(" ")[0]);
-                                            }
-                                            else{
-                                                list.add(temp);
-                                            }
-                                            break;
-                                        }
-                                        else{
-                                            JSONObject temp_field = fieldsArray.getJSONObject(i+1);
-                                            String temp = temp_field.getString("inferText");
-                                            if(temp.split(" ").length > 1){
-                                                list.add(temp.split(" ")[0]);
-                                            }
-                                            else{
-                                                list.add(temp);
-                                            }
-                                            break;
-                                        }
-                                    }
-//                                    String temp = inferText.substring(start_index + nutirition.length()).trim();
-//                                    list.add(temp);
-//                                    break;
-                                }
-                            }
+                    if(inferText.contains(nutirition)) {
+                        // 특정 영양성분으로 끝날때
+                        if(inferText.endsWith(nutirition)) {
                             if (nutirition.equals("kcal")) {
-                                JSONObject temp_field = fieldsArray.getJSONObject(i-1);
+                                JSONObject temp_field = fieldsArray.getJSONObject(i - 1);
                                 String temp = temp_field.getString("inferText");
-                                System.out.println("-------------" + temp);
-
-                                if(temp.trim().contains("당")){
-                                    int start_index = inferText.indexOf("당");
-                                    String temp_index = inferText.trim().substring(start_index+1);
-                                    list.add(temp_index);
-                                }
-                                else if(temp.split(" ").length > 1){
-                                    list.add(temp.split(" ")[0]);
-                                }
-                                else{
-                                    list.add(temp);
-                                }
+                                list.add(temp);
+                                break;
+                            } else {
+                                JSONObject temp_field = fieldsArray.getJSONObject(i + 1);
+                                String temp = temp_field.getString("inferText");
+                                list.add(temp);
                                 break;
                             }
-                            else {
-                                JSONObject temp_field = fieldsArray.getJSONObject(i+1);
-                                String temp = temp_field.getString("inferText");
-                                if(temp.split(" ").length > 1){
-                                    list.add(temp.split(" ")[0]);
-                                }
-                                else{
+                        }
+                        if(inferText.contains("mg")){
+                            inferText = inferText.replace("mg", "");
+                        }
+                        // nutrition 보다 클때
+                        if(inferText.length() > nutirition.length()){
+                            int start_index_1 = inferText.indexOf(nutirition);
+                            // g 앞의 문자열을 추출
+                            if (start_index_1 != -1){
+                                int g_index = inferText.indexOf("g");
+                                if(inferText.contains("g") && g_index > start_index_1) {
+                                    int end_index = inferText.indexOf("g");
+                                    System.out.println(inferText);
+                                    String temp = inferText.substring(start_index_1 + nutirition.length(), end_index);
                                     list.add(temp);
+                                    break;
                                 }
+                                // g 없을때
+                                else{
+                                    String temp = inferText.substring(start_index_1 + nutirition.length());
+                                    list.add(inferText);
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            if (nutirition.equals("kcal")) {
+                                JSONObject temp_field = fieldsArray.getJSONObject(i - 1);
+                                String temp = temp_field.getString("inferText");
+                                list.add(temp);
+                                break;
+                            } else {
+                                JSONObject temp_field = fieldsArray.getJSONObject(i + 1);
+                                String temp = temp_field.getString("inferText");
+                                list.add(temp);
                                 break;
                             }
                         }
                     }
+
                     double inferConfidence = field.getDouble("inferConfidence");
 
-                    System.out.println("InferText: " + inferText);
+                    System.out.println("InferText: " + inferText.trim());
                     System.out.println("InferConfidence: " + inferConfidence);
                     System.out.println();
                         }
@@ -316,7 +266,11 @@ public class UserService {
                 System.out.println(list);
 
                 for(String nutrition : list) {
-                    if(nutrition.contains("g")){
+                    if(nutrition.contains("당")) {
+                        int start_index = nutrition.indexOf("당");
+                        String temp = nutrition.substring(start_index+1);
+                        nutrition_array.add(Float.valueOf(temp));
+                    } else if(nutrition.contains("g")){
                         int end_index = nutrition.indexOf("g");
                         String temp = nutrition.substring(0, end_index);
                         nutrition_array.add(Float.valueOf(temp));
@@ -328,6 +282,7 @@ public class UserService {
                         nutrition_array.add(Float.valueOf(temp));
                     }
                     else{
+                        nutrition = nutrition.replaceAll("[^0-9]", "");
                         nutrition_array.add(Float.valueOf(nutrition));
                     }
                 }
@@ -342,59 +297,56 @@ public class UserService {
             for(int j=4; j>=0; j--){
                 List<UserNutrition> users = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now().minusDays(j));
 
-                if (users.size() == 0){
+                if (users.isEmpty()){
                     nutrition_key.add(LocalDate.now().minusDays(j));
                     nutrition_value.add((float) 0);
                     continue;
                 }
 
-                if(nutrition.equals("kcal")){
-                    Float kcal = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
-                        kcal += userNutrition.getKcal();
+                switch (nutrition) {
+                    case "kcal" -> {
+                        Float kcal = (float) 0;
+                        for (UserNutrition userNutrition : users) {
+                            kcal += userNutrition.getKcal();
+                        }
+                        nutrition_key.add(LocalDate.now().minusDays(j));
+                        nutrition_value.add(kcal);
                     }
-                    nutrition_key.add(LocalDate.now().minusDays(j));
-                    nutrition_value.add(kcal);
-                }
-                else if(nutrition.equals("carb")){
-                    Float carb = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
-                        carb += userNutrition.getCarb();
+                    case "carb" -> {
+                        Float carb = (float) 0;
+                        for (UserNutrition userNutrition : users) {
+                            carb += userNutrition.getCarb();
+                        }
+                        nutrition_key.add(LocalDate.now().minusDays(j));
+                        nutrition_value.add(carb);
                     }
-                    nutrition_key.add(LocalDate.now().minusDays(j));
-                    nutrition_value.add(carb);
-                }
-                else if(nutrition.equals("sugar")){
-                    Float sugar = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
-                        sugar += userNutrition.getSugar();
+                    case "sugar" -> {
+                        Float sugar = (float) 0;
+                        for (UserNutrition userNutrition : users) {
+                            sugar += userNutrition.getSugar();
+                        }
+                        nutrition_key.add(LocalDate.now().minusDays(j));
+                        nutrition_value.add(sugar);
                     }
-                    nutrition_key.add(LocalDate.now().minusDays(j));
-                    nutrition_value.add(sugar);
-                }
-                else if(nutrition.equals("fat")){
-                    Float fat = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
-                        fat += userNutrition.getFat();
+                    case "fat" -> {
+                        Float fat = (float) 0;
+                        for (UserNutrition userNutrition : users) {
+                            fat += userNutrition.getFat();
+                        }
+                        nutrition_key.add(LocalDate.now().minusDays(j));
+                        nutrition_value.add(fat);
                     }
-                    nutrition_key.add(LocalDate.now().minusDays(j));
-                    nutrition_value.add(fat);
-                }
-                else if(nutrition.equals("protein")){
-                    Float protein = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
-                        protein += userNutrition.getProtein();
+                    case "protein" -> {
+                        Float protein = (float) 0;
+                        for (UserNutrition userNutrition : users) {
+                            protein += userNutrition.getProtein();
+                        }
+                        nutrition_key.add(LocalDate.now().minusDays(j));
+                        nutrition_value.add(protein);
                     }
-                    nutrition_key.add(LocalDate.now().minusDays(j));
-                    nutrition_value.add(protein);
-                }
-                else{
-                    return null;
+                    default -> {
+                        return null;
+                    }
                 }
             }
             result.add(nutrition_key);
@@ -404,7 +356,7 @@ public class UserService {
         }
 
     public ArrayList<ArrayList> getNutritionDaily(String id){
-        ArrayList<ArrayList> result = new ArrayList<ArrayList>();
+        ArrayList<ArrayList> result = new ArrayList<>();
         ArrayList<Float> nutrition_value = new ArrayList<>();
         ArrayList<String> nutrition_list = new ArrayList<>(List.of("kcal", "carb", "sugar", "fat", "protein"));
         Optional<User> user = this.userRepository.findByLoginId(id);
@@ -415,8 +367,8 @@ public class UserService {
             ArrayList<Float> zero_list = new ArrayList<>(List.of(0F, 0F, 0F, 0F, 0F));
             result.add(zero_list);
 
-            if(!user.isEmpty()){
-                ArrayList<Float> temp_list = new ArrayList<Float>();
+            if(user.isPresent()){
+                ArrayList<Float> temp_list = new ArrayList<>();
                 User temp = user.get();
                 if(temp.getGender().equals("male")){
                     temp_list.add(1650F);
@@ -435,53 +387,50 @@ public class UserService {
         }
 
         for(String nutrition : nutrition_list){
-            if(nutrition.equals("kcal")){
-                Float kcal = (float) 0;
-                for(int i = 0; i < nutritions.size(); i++){
-                    UserNutrition userNutrition = nutritions.get(i);
-                    kcal += userNutrition.getKcal();
+            switch (nutrition) {
+                case "kcal" -> {
+                    Float kcal = (float) 0;
+                    for (UserNutrition userNutrition : nutritions) {
+                        kcal += userNutrition.getKcal();
+                    }
+                    nutrition_value.add(kcal);
                 }
-                nutrition_value.add(kcal);
-            }
-            else if(nutrition.equals("carb")){
-                Float carb = (float) 0;
-                for(int i = 0; i < nutritions.size(); i++){
-                    UserNutrition userNutrition = nutritions.get(i);
-                    carb += userNutrition.getCarb();
+                case "carb" -> {
+                    Float carb = (float) 0;
+                    for (UserNutrition userNutrition : nutritions) {
+                        carb += userNutrition.getCarb();
+                    }
+                    nutrition_value.add(carb);
                 }
-                nutrition_value.add(carb);
-            }
-            else if(nutrition.equals("sugar")){
-                Float sugar = (float) 0;
-                for(int i = 0; i < nutritions.size(); i++){
-                    UserNutrition userNutrition = nutritions.get(i);
-                    sugar += userNutrition.getSugar();
+                case "sugar" -> {
+                    Float sugar = (float) 0;
+                    for (UserNutrition userNutrition : nutritions) {
+                        sugar += userNutrition.getSugar();
+                    }
+                    nutrition_value.add(sugar);
                 }
-                nutrition_value.add(sugar);
-            }
-            else if(nutrition.equals("fat")){
-                Float fat = (float) 0;
-                for(int i = 0; i < nutritions.size(); i++){
-                    UserNutrition userNutrition = nutritions.get(i);
-                    fat += userNutrition.getFat();
+                case "fat" -> {
+                    Float fat = (float) 0;
+                    for (UserNutrition userNutrition : nutritions) {
+                        fat += userNutrition.getFat();
+                    }
+                    nutrition_value.add(fat);
                 }
-                nutrition_value.add(fat);
-            }
-            else if(nutrition.equals("protein")){
-                Float protein = (float) 0;
-                for(int i = 0; i < nutritions.size(); i++){
-                    UserNutrition userNutrition = nutritions.get(i);
-                    protein += userNutrition.getProtein();
+                case "protein" -> {
+                    Float protein = (float) 0;
+                    for (UserNutrition userNutrition : nutritions) {
+                        protein += userNutrition.getProtein();
+                    }
+                    nutrition_value.add(protein);
                 }
-                nutrition_value.add(protein);
             }
         }
 
         System.out.println(nutrition_value);
         result.add(nutrition_value);
 
-        if(!user.isEmpty()){
-            ArrayList<Float> temp_list = new ArrayList<Float>();
+        if(user.isPresent()){
+            ArrayList<Float> temp_list = new ArrayList<>();
             User temp = user.get();
             if(temp.getGender().equals("male")){
                 temp_list.add(1650F);
@@ -512,7 +461,7 @@ public class UserService {
             for (int j = 4; j >= 0; j--) {
                 List<UserNutrition> users = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now().minusDays(j));
 
-                if (users.size() == 0) {
+                if (users.isEmpty()) {
                     temp_date.add(LocalDate.now().minusDays(j));
                     temp_kcal.add((float) 0);
                     temp_carb.add((float) 0);
@@ -528,8 +477,7 @@ public class UserService {
                     float sugar = (float) 0;
                     float fat = (float) 0;
                     float protein = (float) 0;
-                    for(int i = 0; i < users.size(); i++){
-                        UserNutrition userNutrition = users.get(i);
+                    for (UserNutrition userNutrition : users) {
                         kcal += userNutrition.getKcal();
                         carb += userNutrition.getCarb();
                         sugar += userNutrition.getSugar();
