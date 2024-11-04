@@ -29,4 +29,9 @@ public class NutritionController {
     public ArrayList<ArrayList> getNutritionAll(@PathVariable String id) {
         return this.userService.getNutritionAll(id);
     }
+
+    @GetMapping("/recommend/{id}")
+    public String getRecommend(@PathVariable String id) {
+        return this.userService.getRecommend(id);
+    }
 }

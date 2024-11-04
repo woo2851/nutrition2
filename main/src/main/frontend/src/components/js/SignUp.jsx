@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import '../css/login_signup.css'
 import { Link } from 'react-router-dom';
 import { useLogin } from '../context/LoginContext';
@@ -32,16 +32,16 @@ export default function SignUp() {
   const handleClick = (e) => {
     e.preventDefault()
     const isBlank = checkBlank()
-    if (isBlank === true) {
-      alert("정보를 입력해주세요")
-    }
-    else if (pw !== pwCheck) {
-      alert("비밀번호를 다시한번 확인해주세요")
-    }
-    else {
-      console.log(gender)
-      signUp(id, pw, gender, weight)
-    }
+      if (isBlank === true || typeof Number(weight) === NaN) {
+        alert("정보를 확인해주세요")
+      }
+      else if (pw !== pwCheck) {
+        alert("비밀번호를 다시한번 확인해주세요")
+      }
+      else {
+        signUp(id, pw, gender, weight)
+      }
+    
   }
 
   const handleChange = event => {
@@ -49,7 +49,7 @@ export default function SignUp() {
   };
 
   const checkBlank = () => {
-    if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "") {
+    if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "" ) {
       return true
     }
     else {

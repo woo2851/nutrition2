@@ -1,10 +1,12 @@
 package com.example.nutrition.domain.service;
 
 import com.azure.storage.blob.*;
+import com.example.nutrition.domain.entity.Nutrition;
 import com.example.nutrition.domain.entity.User;
 import com.example.nutrition.domain.entity.UserNutrition;
 import com.example.nutrition.domain.dto.JoinRequest;
 import com.example.nutrition.domain.dto.LoginRequest;
+import com.example.nutrition.domain.repository.NutritionRepository;
 import com.example.nutrition.domain.repository.UserNutritionRepository;
 import com.example.nutrition.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -39,6 +41,7 @@ import java.io.InputStreamReader;
 public class UserService {
     private final UserRepository userRepository;
     private final UserNutritionRepository userNutritionRepository;
+    private final NutritionRepository nutritionRepository;
 
     @Value("${custom.api.azure_connection}")
     private String connectionString;
@@ -570,6 +573,15 @@ public class UserService {
                 file.getContentType(),           // 파일 Content-Type
                 new ByteArrayInputStream(imageBytes) // 파일 데이터
         );
+    }
+
+    public String getRecommend(String id) {
+        List<UserNutrition> nutritions = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
+        if(nutritions.isEmpty()){
+            Optional<Nutrition> recommend = this.nutritionRepository.findRandomRecommend();
+            return recommend.get().getName();
+        }
+        return null;
     }
 }
 

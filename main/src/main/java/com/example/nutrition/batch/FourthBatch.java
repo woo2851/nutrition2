@@ -1,7 +1,7 @@
 //package com.example.nutrition.batch;
 //
-//import com.example.nutrition.domain.entity.Nutrition;
-//import com.example.nutrition.domain.repository.NutritionRepository;
+//import com.example.nutrition.domain.entity.NutritionSearch;
+//import com.example.nutrition.domain.repository.NutritionSearchRepository;
 //import org.apache.poi.ss.usermodel.Row;
 //import org.springframework.batch.core.Job;
 //import org.springframework.batch.core.Step;
@@ -23,12 +23,12 @@
 //
 //    private final JobRepository jobRepository;
 //    private final PlatformTransactionManager platformTransactionManager;
-//    private final NutritionRepository nutritionRepository;
+//    private final NutritionSearchRepository nutritionSearchRepository;
 //
-//    public FourthBatch(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager, NutritionRepository nutritionRepository) {
+//    public FourthBatch(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager, NutritionSearchRepository nutritionSearchRepository) {
 //        this.jobRepository = jobRepository;
 //        this.platformTransactionManager = platformTransactionManager;
-//        this.nutritionRepository = nutritionRepository;
+//        this.nutritionSearchRepository = nutritionSearchRepository;
 //    }
 //
 //    @Bean
@@ -37,15 +37,15 @@
 //        System.out.println("fourth job");
 //
 //        return new JobBuilder("fourthJob", jobRepository)
-//                .start(fourthStep())
+//                .start(thirdStep())
 //                .build();
 //    }
 //
 //    @Bean
-//    public Step fourthStep() {
+//    public Step thirdStep() {
 //
-//        return new StepBuilder("fourthStep", jobRepository)
-//                .<Row, Nutrition> chunk(10, platformTransactionManager)
+//        return new StepBuilder("thirdStep", jobRepository)
+//                .<Row, NutritionSearch> chunk(10, platformTransactionManager)
 //                .reader(excelReader())
 //                .processor(fourthProcessor())
 //                .writer(fourthAfterWriter())
@@ -56,7 +56,7 @@
 //    public ItemStreamReader<Row> excelReader() {
 //
 //        try {
-//            return new ExcelRowReader("C:\\Users\\woo28\\Desktop\\nutrition22\\main\\src\\main\\java\\com\\example\\nutrition\\batch\\data.xlsx");
+//            return new ExcelRowReader("C:\\Users\\woo28\\Desktop\\nutrition22\\main\\src\\main\\java\\com\\example\\nutrition\\batch\\data1.xlsx");
 //            //리눅스나 맥은 /User/형태로
 //        } catch (IOException e) {
 //            throw new RuntimeException(e);
@@ -64,14 +64,14 @@
 //    }
 //
 //    @Bean
-//    public ItemProcessor<Row, Nutrition> fourthProcessor() {
+//    public ItemProcessor<Row, NutritionSearch> fourthProcessor() {
 //
-//        return new ItemProcessor<Row, Nutrition>() {
+//        return new ItemProcessor<Row, NutritionSearch>() {
 //
 //            @Override
-//            public Nutrition process(Row item) {
+//            public NutritionSearch process(Row item) {
 //
-//                Nutrition nutrition = new Nutrition();
+//                NutritionSearch nutrition = new NutritionSearch();
 //                nutrition.setName(item.getCell(0).getStringCellValue());
 //                nutrition.setCategory(item.getCell(1).getStringCellValue());
 //                nutrition.setMain_food(item.getCell(2).getStringCellValue());
@@ -86,10 +86,10 @@
 //    }
 //
 //    @Bean
-//    public RepositoryItemWriter<Nutrition> fourthAfterWriter() {
+//    public RepositoryItemWriter<NutritionSearch> fourthAfterWriter() {
 //
-//        return new RepositoryItemWriterBuilder<Nutrition>()
-//                .repository(nutritionRepository)
+//        return new RepositoryItemWriterBuilder<NutritionSearch>()
+//                .repository(nutritionSearchRepository)
 //                .methodName("save")
 //                .build();
 //    }

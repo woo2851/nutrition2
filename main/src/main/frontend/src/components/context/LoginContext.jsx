@@ -106,8 +106,13 @@ export const LoginProvider = ({ children }) => {
     return result.data
   }
 
+  const getRecommend = async (user) => {
+    const result = await user.getRecommend(user.id)
+    return result.data
+  }
+
   return (
-    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser}}>
+    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend}}>
       {children}
     </LoginContext.Provider>
   );
