@@ -6,6 +6,7 @@ export default function Goal() {
   const { user, isLoggedIn, getNutritionDailyContext, getRecommend } = useLogin();
 
   const [recommend, setRecommend] = useState("")
+  const [description, setDescription] = useState("")
   const [nutritionData, setNutritionData] = useState([
     { id: 1, nutrition: "kcal", current: "", recommend: 0 },
     { id: 2, nutrition: "탄수화물", current: "", recommend: 0 },
@@ -29,11 +30,18 @@ export default function Goal() {
       fetchData();
       const fetchRecommend = async () => {
         const recommend = await getRecommend(user)
-        setRecommend(recommend)
+        setRecommend(recommend[0])
+        setDescription(recommend[1])
       }
       fetchRecommend()
     }
   }, [isLoggedIn, user, getNutritionDailyContext]);
+
+  const onClick = async () => {
+    const recommend = await getRecommend(user)
+    setRecommend(recommend[0])
+    setDescription(recommend[1])
+  }
 
   return (
     <div className="goal">
@@ -70,7 +78,8 @@ export default function Goal() {
         <h3>추천 식단</h3>
         <img src="image/recommend.jpg" alt="추천 식단" />
         <h3>{recommend}</h3>
-        <h4>설명</h4>
+        <h4>{description}</h4>
+        <button className="small-button" onClick={onClick}>다시 추천</button>
       </div>
     </div>
   );

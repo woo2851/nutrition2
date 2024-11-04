@@ -9,6 +9,8 @@ import com.example.nutrition.domain.dto.LoginRequest;
 import com.example.nutrition.domain.repository.NutritionRepository;
 import com.example.nutrition.domain.repository.UserNutritionRepository;
 import com.example.nutrition.domain.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.imgscalr.Scalr;
@@ -21,7 +23,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.*;
 import java.awt.image.BufferedImage;
@@ -48,6 +54,9 @@ public class UserService {
 
     @Value("${custom.api.ocr_key}")
     private String secretKey;
+
+    @Value("${custom.api.chatgpt}")
+    private String chatgptKey;
 
     public boolean checkLoginIdDuplicate(String loginId) {
         return userRepository.existsByLoginId(loginId);
@@ -523,11 +532,58 @@ public class UserService {
         );
     }
 
-    public String getRecommend(String id) {
-        List<UserNutrition> nutritions = this.userNutritionRepository.findByUserIdAndDate(id, LocalDate.now());
-        if(nutritions.isEmpty()){
-            Optional<Nutrition> recommend = this.nutritionRepository.findRandomRecommend();
-            return recommend.get().getName();
+    public ArrayList<String> getRecommend(String id) {
+        ArrayList<String> array = new ArrayList<>();
+        Optional<Nutrition> recommend = this.nutritionRepository.findRandomRecommend();
+        String name = recommend.get().getName();
+        String description = ChatGPT(recommend.get().getName());
+        array.add(name);
+        array.add(description);
+        return array;
+    }
+
+    public String ChatGPT(String menu){
+        final String API_KEY = chatgptKey; // OpenAI API 키를 여기에 입력하세요
+        final String API_URL = "https://api.openai.com/v1/chat/completions";
+
+        try {
+            // JSON 요청 본문 생성
+            Map<String, Object> requestBody = Map.of(
+                    "model", "gpt-4o-mini",
+                    "messages", List.of(Map.of("role", "user", "content", menu + " 간단하게 설명해줘"))
+            );
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String requestBodyJson = objectMapper.writeValueAsString(requestBody);
+
+            // HTTP 요청 생성
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(API_URL))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", "Bearer " + API_KEY)
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBodyJson))
+                    .build();
+
+                // HTTP 요청 보내기
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) { // 성공적인 응답 확인
+                // 응답 JSON 파싱
+                JsonNode jsonResponse = objectMapper.readTree(response.body());
+                String content = jsonResponse
+                        .get("choices")
+                        .get(0)
+                        .get("message")
+                        .get("content")
+                        .asText();
+
+                System.out.println("ChatGPT's reply: " + content);
+                return content;
+                // ChatGPT의 응답 출력
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }

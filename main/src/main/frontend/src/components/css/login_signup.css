@@ -330,5 +330,7 @@ label {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 5px;
   padding: 20px;
-  width: 35vh;
+  width: 40vh;
+  height: 450px;
 }
+
