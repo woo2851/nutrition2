@@ -7,6 +7,7 @@ import com.example.nutrition.domain.entity.UserNutrition;
 import com.example.nutrition.domain.dto.JoinRequest;
 import com.example.nutrition.domain.dto.LoginRequest;
 import com.example.nutrition.domain.repository.NutritionRepository;
+import com.example.nutrition.domain.repository.NutritionSearchRepository;
 import com.example.nutrition.domain.repository.UserNutritionRepository;
 import com.example.nutrition.domain.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -45,6 +46,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserNutritionRepository userNutritionRepository;
     private final NutritionRepository nutritionRepository;
+    private final NutritionSearchRepository nutritionSearchRepository;
 
     @Value("${custom.api.azure_connection}")
     private String connectionString;
@@ -550,7 +552,7 @@ public class UserService {
             // JSON 요청 본문 생성
             Map<String, Object> requestBody = Map.of(
                     "model", "gpt-4o-mini",
-                    "messages", List.of(Map.of("role", "user", "content", menu + " 간단하게 설명해줘"))
+                    "messages", List.of(Map.of("role", "user", "content", menu + "요리 간단하게 설명해줘"))
             );
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -586,6 +588,10 @@ public class UserService {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ArrayList<String> getFood(String food){
+        return this.nutritionSearchRepository.getFood(food);
     }
 }
 

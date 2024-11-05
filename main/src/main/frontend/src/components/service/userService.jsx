@@ -77,5 +77,14 @@ export default class UserService{
       console.error('Error getting nutrition:', error);
     }
   };
+
+  async searchFood(food){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/search/${food}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
 }
 

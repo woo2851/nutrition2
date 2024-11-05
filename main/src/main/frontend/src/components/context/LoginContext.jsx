@@ -111,8 +111,13 @@ export const LoginProvider = ({ children }) => {
     return result.data
   }
 
+  const searchFood = async (food) => {
+    const result = await user.searchFood(food)
+    return result.data
+  }
+
   return (
-    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend}}>
+    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend, searchFood}}>
       {children}
     </LoginContext.Provider>
   );

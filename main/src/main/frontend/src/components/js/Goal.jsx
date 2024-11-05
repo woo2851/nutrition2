@@ -5,8 +5,8 @@ import '../css/login_signup.css';
 export default function Goal() {
   const { user, isLoggedIn, getNutritionDailyContext, getRecommend } = useLogin();
 
-  const [recommend, setRecommend] = useState("")
-  const [description, setDescription] = useState("")
+  const [recommend, setRecommend] = useState("로딩중")
+  const [description, setDescription] = useState("로딩중")
   const [nutritionData, setNutritionData] = useState([
     { id: 1, nutrition: "kcal", current: "", recommend: 0 },
     { id: 2, nutrition: "탄수화물", current: "", recommend: 0 },
@@ -38,6 +38,8 @@ export default function Goal() {
   }, [isLoggedIn, user, getNutritionDailyContext]);
 
   const onClick = async () => {
+    setRecommend("로딩중")
+    setDescription("로딩중")
     const recommend = await getRecommend(user)
     setRecommend(recommend[0])
     setDescription(recommend[1])

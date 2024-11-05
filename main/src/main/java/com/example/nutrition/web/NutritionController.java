@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,5 +34,10 @@ public class NutritionController {
     @GetMapping("/recommend/{id}")
     public ArrayList<String> getRecommend(@PathVariable String id) {
         return this.userService.getRecommend(id);
+    }
+
+    @GetMapping("/search/{food}")
+    public ArrayList<String> getFood(@PathVariable String food) {
+        return this.userService.getFood(food);
     }
 }

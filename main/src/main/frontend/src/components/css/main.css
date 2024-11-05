@@ -12,6 +12,13 @@
     align-items: center;
 }
 
+main_button{
+    display: flex;
+    justify-content: space-between;
+    width: 400px;
+    height: 100px;
+}
+
 /* h2 {
     margin-bottom: 0%;
 } */
@@ -32,4 +39,27 @@
 
 .main_h2 {
     margin-bottom: 0px;
+}
+
+.pagination {
+    display: flex;
+    list-style-type: none;
+    padding: 0;
+}
+
+.pagination li {
+    margin: 0 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+}
+
+.pagination li.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.pagination li:hover:not(.active) {
+    background-color: #eee;
 }
