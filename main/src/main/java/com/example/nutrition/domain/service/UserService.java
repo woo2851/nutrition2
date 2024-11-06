@@ -2,6 +2,7 @@ package com.example.nutrition.domain.service;
 
 import com.azure.storage.blob.*;
 import com.example.nutrition.domain.entity.Nutrition;
+import com.example.nutrition.domain.entity.NutritionSearch;
 import com.example.nutrition.domain.entity.User;
 import com.example.nutrition.domain.entity.UserNutrition;
 import com.example.nutrition.domain.dto.JoinRequest;
@@ -111,7 +112,7 @@ public class UserService {
 
             BlobClient blobClient = containerClient.getBlobClient(blobFileName);
 
-            MultipartFile resizedFile = resizeImage(file, 850, 850);
+            MultipartFile resizedFile = resizeImage(file, 900, 900);
             InputStream fileInputStream = resizedFile.getInputStream();
 
             blobClient.upload(fileInputStream);
@@ -277,7 +278,7 @@ public class UserService {
                 System.out.println(list);
 
                 for(String nutrition : list) {
-                    if(nutrition.contains("당")) {
+                    if(nutrition.contains("당") && list.get(0).equals(nutrition)) {
                         int start_index = nutrition.indexOf("당");
                         String temp = nutrition.substring(start_index+1);
                         nutrition_array.add(Float.valueOf(temp));
@@ -294,6 +295,7 @@ public class UserService {
                     }
                     else{
                         nutrition = nutrition.replaceAll("[^0-9]", "");
+                        System.out.println(nutrition);
                         nutrition_array.add(Float.valueOf(nutrition));
                     }
                 }
@@ -552,7 +554,7 @@ public class UserService {
             // JSON 요청 본문 생성
             Map<String, Object> requestBody = Map.of(
                     "model", "gpt-4o-mini",
-                    "messages", List.of(Map.of("role", "user", "content", menu + "요리 간단하게 설명해줘"))
+                    "messages", List.of(Map.of("role", "user", "content", menu + " 간단하게 설명해줘"))
             );
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -592,6 +594,26 @@ public class UserService {
 
     public ArrayList<String> getFood(String food){
         return this.nutritionSearchRepository.getFood(food);
+    }
+
+    public boolean addFood(String id, String food){
+        try{
+            NutritionSearch temp_food = this.nutritionSearchRepository.findByName(food);
+            UserNutrition temp_user = new UserNutrition();
+            temp_user.setUserId(id);
+            temp_user.setFood_name(food);
+            temp_user.setKcal(temp_food.getKcal());
+            temp_user.setCarb(temp_food.getCarb());
+            temp_user.setSugar(temp_food.getSugar());
+            temp_user.setFat(temp_food.getFat());
+            temp_user.setProtein(temp_food.getProtein());
+            temp_user.setDate(LocalDate.now());
+            this.userNutritionRepository.save(temp_user);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
 

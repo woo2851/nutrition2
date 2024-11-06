@@ -27,6 +27,12 @@ main_button{
     background-color: #00bf63;
 }
 
+.search_food {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 .footer{
     position: fixed;
     left: 0px;

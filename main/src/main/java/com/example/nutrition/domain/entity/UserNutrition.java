@@ -2,16 +2,14 @@ package com.example.nutrition.domain.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "UserNutrition")
@@ -20,6 +18,7 @@ public class UserNutrition {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String food_name;
     private String userId;
     private Float kcal;
     private Float carb;

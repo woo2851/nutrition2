@@ -40,4 +40,9 @@ public class NutritionController {
     public ArrayList<String> getFood(@PathVariable String food) {
         return this.userService.getFood(food);
     }
+
+    @GetMapping("/add/{id}/{food}")
+    public boolean addFood(@PathVariable String id, @PathVariable String food) {
+        return this.userService.addFood(id, food);
+    }
 }
