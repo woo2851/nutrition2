@@ -112,7 +112,7 @@ public class UserService {
 
             BlobClient blobClient = containerClient.getBlobClient(blobFileName);
 
-            MultipartFile resizedFile = resizeImage(file, 900, 900);
+            MultipartFile resizedFile = resizeImage(file, 1024, 1024);
             InputStream fileInputStream = resizedFile.getInputStream();
 
             blobClient.upload(fileInputStream);
@@ -406,35 +406,35 @@ public class UserService {
                     for (UserNutrition userNutrition : nutritions) {
                         kcal += userNutrition.getKcal();
                     }
-                    nutrition_value.add(kcal);
+                    nutrition_value.add((float) Math.ceil(kcal));
                 }
                 case "carb" -> {
                     Float carb = (float) 0;
                     for (UserNutrition userNutrition : nutritions) {
                         carb += userNutrition.getCarb();
                     }
-                    nutrition_value.add(carb);
+                    nutrition_value.add((float) Math.ceil(carb));
                 }
                 case "sugar" -> {
                     Float sugar = (float) 0;
                     for (UserNutrition userNutrition : nutritions) {
                         sugar += userNutrition.getSugar();
                     }
-                    nutrition_value.add(sugar);
+                    nutrition_value.add((float) Math.ceil(sugar));
                 }
                 case "fat" -> {
                     Float fat = (float) 0;
                     for (UserNutrition userNutrition : nutritions) {
                         fat += userNutrition.getFat();
                     }
-                    nutrition_value.add(fat);
+                    nutrition_value.add((float) Math.ceil(fat));
                 }
                 case "protein" -> {
                     Float protein = (float) 0;
                     for (UserNutrition userNutrition : nutritions) {
                         protein += userNutrition.getProtein();
                     }
-                    nutrition_value.add(protein);
+                    nutrition_value.add((float) Math.ceil(protein));
                 }
             }
         }

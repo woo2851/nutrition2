@@ -32,7 +32,7 @@ export default function SignUp() {
   const handleClick = (e) => {
     e.preventDefault()
     const isBlank = checkBlank()
-      if (isBlank === true || typeof Number(weight) === NaN) {
+      if (isBlank === true) {
         alert("정보를 확인해주세요")
       }
       else if (pw !== pwCheck) {
@@ -49,7 +49,7 @@ export default function SignUp() {
   };
 
   const checkBlank = () => {
-    if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "" ) {
+    if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "" || isNaN(weight)) {
       return true
     }
     else {

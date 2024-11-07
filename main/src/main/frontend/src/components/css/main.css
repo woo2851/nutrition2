@@ -12,20 +12,16 @@
     align-items: center;
 }
 
-main_button{
+.main_buttons {
     display: flex;
-    justify-content: space-between;
-    width: 400px;
-    height: 100px;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-left: 10px;
 }
 
 /* h2 {
     margin-bottom: 0%;
 } */
-
-.main_button{
-    background-color: #00bf63;
-}
 
 .search_food {
     display: flex;
@@ -68,4 +64,12 @@ main_button{
 
 .pagination li:hover:not(.active) {
     background-color: #eee;
+}
+
+.food_list {
+    margin-top: 0;
+}
+
+.food_item {
+    margin-bottom: 4px;
 }

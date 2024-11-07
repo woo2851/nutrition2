@@ -16,7 +16,7 @@ export default function Goal() {
   ]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn === true) {
       const fetchData = async () => {
         const nutrition = await getNutritionDailyContext(user);
         setNutritionData([
