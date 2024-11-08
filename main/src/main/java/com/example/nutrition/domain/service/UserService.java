@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -93,7 +94,7 @@ public class UserService {
         return user.getLoginId();
     }
 
-    public boolean uploadImage(MultipartFile file, String id) throws IOException, InterruptedException {
+    public boolean uploadImage(MultipartFile file, String id, String foodName) throws IOException, InterruptedException {
         String containerName = "nutrition";
         UUID uuid = UUID.randomUUID();
         String blobFileName = id + "#" + uuid;
@@ -123,6 +124,7 @@ public class UserService {
             ArrayList<Float> array = preprocessing(result);
             UserNutrition temp = UserNutrition.builder()
                     .userId(id)
+                    .food_name(foodName)
                     .kcal(array.get(0))
                     .carb(array.get(1))
                     .sugar(array.get(2))
@@ -331,7 +333,7 @@ public class UserService {
                             carb += userNutrition.getCarb();
                         }
                         nutrition_key.add(LocalDate.now().minusDays(j));
-                        nutrition_value.add(carb);
+                        nutrition_value.add((float) Math.ceil(carb));
                     }
                     case "sugar" -> {
                         Float sugar = (float) 0;
@@ -339,7 +341,7 @@ public class UserService {
                             sugar += userNutrition.getSugar();
                         }
                         nutrition_key.add(LocalDate.now().minusDays(j));
-                        nutrition_value.add(sugar);
+                        nutrition_value.add((float) Math.ceil(sugar));
                     }
                     case "fat" -> {
                         Float fat = (float) 0;
@@ -347,7 +349,7 @@ public class UserService {
                             fat += userNutrition.getFat();
                         }
                         nutrition_key.add(LocalDate.now().minusDays(j));
-                        nutrition_value.add(fat);
+                        nutrition_value.add((float) Math.ceil(fat));
                     }
                     case "protein" -> {
                         Float protein = (float) 0;
@@ -355,7 +357,7 @@ public class UserService {
                             protein += userNutrition.getProtein();
                         }
                         nutrition_key.add(LocalDate.now().minusDays(j));
-                        nutrition_value.add(protein);
+                        nutrition_value.add((float) Math.ceil(protein));
                     }
                     default -> {
                         return null;
@@ -368,7 +370,7 @@ public class UserService {
             return result;
         }
 
-    public ArrayList<ArrayList> getNutritionDaily(String id){
+    public ArrayList<ArrayList> getNutritionDaily(String id, String goal){
         ArrayList<ArrayList> result = new ArrayList<>();
         ArrayList<Float> nutrition_value = new ArrayList<>();
         ArrayList<String> nutrition_list = new ArrayList<>(List.of("kcal", "carb", "sugar", "fat", "protein"));
@@ -383,17 +385,58 @@ public class UserService {
             if(user.isPresent()){
                 ArrayList<Float> temp_list = new ArrayList<>();
                 User temp = user.get();
+                Float Standard_male_kcal = 1650F;
+                Float Standard_female_kcal = 1350F;
+                Float Standard_carb = 100F;
+                Float Standard_sugar = 65F;
+                int Standard_fat = temp.getWeight();
+                int Standard_protein = temp.getWeight();
                 if(temp.getGender().equals("male")){
-                    temp_list.add(1650F);
+                    if (goal.equals("diet")){
+                        temp_list.add(Standard_male_kcal - 200F);
+                        temp_list.add((float) (Standard_carb * 0.8));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) (Standard_fat * 0.8));
+                        temp_list.add((float) (Standard_protein * 0.8));
+                    }
+                    else if (goal.equals("common")){
+                        temp_list.add(Standard_male_kcal);
+                        temp_list.add((Standard_carb));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) Standard_fat);
+                        temp_list.add((float) Standard_protein);
+                    }
+                    else if (goal.equals("muscle")){
+                        temp_list.add(Standard_male_kcal + 200F);
+                        temp_list.add((float) (Standard_carb * 1.2));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) (Standard_fat * 1.2));
+                        temp_list.add((float) (Standard_protein * 1.2));
+                    }
                 }
-                else{
-                    temp_list.add(1350F);
+                else if(temp.getGender().equals("female")){
+                    if (goal.equals("diet")){
+                        temp_list.add(Standard_female_kcal - 200F);
+                        temp_list.add((float) (Standard_carb * 0.8));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) (Standard_fat * 0.8));
+                        temp_list.add((float) (Standard_protein * 0.8));
+                    }
+                    else if (goal.equals("common")){
+                        temp_list.add(Standard_female_kcal);
+                        temp_list.add((Standard_carb));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) Standard_fat);
+                        temp_list.add((float) Standard_protein);
+                    }
+                    else if (goal.equals("muscle")){
+                        temp_list.add(Standard_female_kcal + 200F);
+                        temp_list.add((float) (Standard_carb * 1.2));
+                        temp_list.add(Standard_sugar);
+                        temp_list.add((float) (Standard_fat * 1.2));
+                        temp_list.add((float) (Standard_protein * 1.2));
+                    }
                 }
-                temp_list.add(100F);
-                temp_list.add(65F);
-                temp_list.add((float) (0.8 * temp.getWeight()));
-                temp_list.add((float) temp.getWeight());
-                temp_list.add(65F);
                 result.add(temp_list);
             }
             return result;
@@ -453,9 +496,8 @@ public class UserService {
             }
             temp_list.add(100F);
             temp_list.add(65F);
-            temp_list.add((float) (0.8 * temp.getWeight()));
+            temp_list.add((float) (temp.getWeight()));
             temp_list.add((float) temp.getWeight());
-            temp_list.add(65F);
             result.add(temp_list);
         }
 
@@ -499,10 +541,10 @@ public class UserService {
                     }
 
                     temp_kcal.add(kcal);
-                    temp_carb.add(carb);
-                    temp_sugar.add(sugar);
-                    temp_fat.add(fat);
-                    temp_protein.add(protein);
+                    temp_carb.add((float) Math.ceil(carb));
+                    temp_sugar.add((float) Math.ceil(sugar));
+                    temp_fat.add((float) Math.ceil(fat));
+                    temp_protein.add((float) Math.ceil(protein));
                 }
             }
             result.add(temp_date);
@@ -554,7 +596,7 @@ public class UserService {
             // JSON 요청 본문 생성
             Map<String, Object> requestBody = Map.of(
                     "model", "gpt-4o-mini",
-                    "messages", List.of(Map.of("role", "user", "content", menu + " 간단하게 설명해줘"))
+                    "messages", List.of(Map.of("role", "user", "content", menu + " 공백포함 320자 이내로 간단하게 설명해줘"))
             );
 
             ObjectMapper objectMapper = new ObjectMapper();
@@ -594,6 +636,10 @@ public class UserService {
 
     public ArrayList<String> getFood(String food){
         return this.nutritionSearchRepository.getFood(food);
+    }
+
+    public ArrayList<String> getFood(String food, float kcal){
+        return this.nutritionSearchRepository.getFoodByKcal(food, kcal);
     }
 
     public boolean addFood(String id, String food){

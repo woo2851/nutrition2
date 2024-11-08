@@ -56,9 +56,9 @@ export const LoginProvider = ({ children }) => {
     return(setIsLoggedIn(new_isLoggedIn))
   }
 
-  const uploadFile = async (user, formData) => {
+  const uploadFile = async (user, formData, foodName) => {
     try{
-      const result = await user.uploadFile(user.id, formData)
+      const result = await user.uploadFile(user.id, formData, foodName)
       if(result.data === true){
         navigate("/upload")
         alert("업로드 성공!")
@@ -66,11 +66,9 @@ export const LoginProvider = ({ children }) => {
     }
     catch(e){
       navigate("/upload")
-      alert("업로드 실패")
+      alert("업로드 실패 식품명으로 추가해주세요")
+      navigate("/search")
     }
-    // console.log(result)
-    // user.result = result
-    // setUser(user)
   }
 
   const getNutritionContext = async (user, nutrition) => {
@@ -96,9 +94,19 @@ export const LoginProvider = ({ children }) => {
     }
   }
 
-  const getNutritionDailyContext = async (user) => {
-    const result = await user.getNutritionDaily(user.id)
-    return result.data
+  const getNutritionDailyContext = async (user, goal) => {
+    if(goal === "다이어트"){
+      const result = await user.getNutritionDaily(user.id, "diet")
+      return result.data
+    }
+    else if(goal === "일반"){
+      const result = await user.getNutritionDaily(user.id, "common")
+      return result.data
+    }
+    else if(goal === "근성장"){
+      const result = await user.getNutritionDaily(user.id, "muscle")
+      return result.data
+    }
   }
 
   const getNutritionAllContext = async (user) => {
@@ -116,13 +124,18 @@ export const LoginProvider = ({ children }) => {
     return result.data
   }
 
+  const searchFoodByKcal = async (food, kcal) => {
+    const result = await user.searchFoodByKcal(food, kcal)
+    return result.data
+  }
+
   const addFood = async (user, food) => {
     const result = await user.addFood(user.id, food)
     return result.data
   }
 
   return (
-    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend, searchFood, addFood}}>
+    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend, searchFood, addFood, searchFoodByKcal}}>
       {children}
     </LoginContext.Provider>
   );

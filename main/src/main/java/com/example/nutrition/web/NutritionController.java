@@ -21,9 +21,9 @@ public class NutritionController {
         return this.userService.getNutrition(id, nutrition);
     }
 
-    @GetMapping("/daily/{id}")
-    public ArrayList<ArrayList> getNutritionDailyAll(@PathVariable String id) {
-        return this.userService.getNutritionDaily(id);
+    @GetMapping("/daily/{id}/{goal}")
+    public ArrayList<ArrayList> getNutritionDailyAll(@PathVariable String id, @PathVariable String goal) {
+        return this.userService.getNutritionDaily(id, goal);
     }
 
     @GetMapping("/all/{id}")
@@ -39,6 +39,11 @@ public class NutritionController {
     @GetMapping("/search/{food}")
     public ArrayList<String> getFood(@PathVariable String food) {
         return this.userService.getFood(food);
+    }
+
+    @GetMapping("/search/{food}/{kcal}")
+    public ArrayList<String> getFood(@PathVariable String food, @PathVariable float kcal) {
+        return this.userService.getFood(food, kcal);
     }
 
     @GetMapping("/add/{id}/{food}")

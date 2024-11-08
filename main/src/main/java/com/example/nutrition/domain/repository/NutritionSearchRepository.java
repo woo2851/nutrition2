@@ -10,7 +10,11 @@ import java.util.List;
 
 public interface NutritionSearchRepository extends JpaRepository<NutritionSearch, Long> {
     @Query(value = "SELECT CONCAT(name, '  ',  kcal) FROM nutrition_search where name like %:food%", nativeQuery = true)
-    ArrayList<String> getFood(@Param("food") String food);
+    ArrayList<String> getFood(String food);
+
+
+    @Query(value = "SELECT CONCAT(name, '  ',  kcal) FROM nutrition_search where name like %:food% and kcal = :kcal", nativeQuery = true)
+    ArrayList<String> getFoodByKcal(String food, float kcal);
 
     NutritionSearch findByName(String food);
 }

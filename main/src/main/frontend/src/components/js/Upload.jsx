@@ -6,6 +6,7 @@ import "../css/nav_footer.css";
 export default function Upload() {
     const navigate = useNavigate();
     const { user, uploadFile } = useLogin();
+    const [foodName, setFoodName] = useState("");
     const [image, SetImage] = useState("");
     const [formData, SetformData] = useState(null);
     let selectedFile = null;
@@ -25,9 +26,23 @@ export default function Upload() {
 
     const handleUpload = (e) => {
         e.preventDefault();
-        navigate("/loding");
-        uploadFile(user, formData);
+        if(formData === null){
+          alert("사진을 등록해주세요")
+        }
+        else{
+          if(foodName === ""){
+            alert("식품명을 입력해주세요")
+          }
+          else{
+            navigate("/loding");
+            uploadFile(user, formData, foodName);
+          }
+        }
     };
+
+    const handleChange = (e) => {
+      setFoodName(e.target.value)
+    }
 
     return (
         <div>
@@ -44,7 +59,7 @@ export default function Upload() {
                     />
                     <div className='preview_description'>
                         {image && <h4>식품명 : </h4>}
-                        {image && <input />}
+                        {image && <input value={foodName} onChange={handleChange}/>}
                     </div>
                     <div className='file_preview'>
                         {image && <img className='image' src={image} alt="preview" />}

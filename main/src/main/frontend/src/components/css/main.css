@@ -29,6 +29,10 @@
     align-items: center;
 }
 
+.search_input {
+    margin-right: 10px;
+}
+
 .footer{
     position: fixed;
     left: 0px;

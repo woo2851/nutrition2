@@ -33,10 +33,10 @@ export default class UserService{
     }
   }
 
-  async uploadFile(id, formData){
+  async uploadFile(id, formData, foodName){
     try {
       return(
-      await axios.post(`http://localhost:9001/upload/${id}`, formData).then((res) => {return res}));
+      await axios.post(`http://localhost:9001/upload/${id}/${foodName}`, formData).then((res) => {return res}));
     } catch (error) {
       console.error('Error uploading photo:', error);
     }
@@ -51,10 +51,10 @@ export default class UserService{
     }
   };
 
-  async getNutritionDaily(id){
+  async getNutritionDaily(id, goal){
     try {
       return(
-      await axios.get(`http://localhost:9001/getNutrition/daily/${id}`).then((res) => {return res}));
+      await axios.get(`http://localhost:9001/getNutrition/daily/${id}/${goal}`).then((res) => {return res}));
     } catch (error) {
       console.error('Error getting nutrition:', error);
     }
@@ -82,6 +82,15 @@ export default class UserService{
     try {
       return(
       await axios.get(`http://localhost:9001/getNutrition/search/${food}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
+
+  async searchFoodByKcal(food, kcal){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/search/${food}/${kcal}`).then((res) => {return res}));
     } catch (error) {
       console.error('Error getting nutrition:', error);
     }
