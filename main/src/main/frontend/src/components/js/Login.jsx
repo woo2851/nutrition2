@@ -29,6 +29,11 @@ export default function Login() {
       login(id,pw)
     }
   }
+
+  const handleReset = () => {
+    setId("")
+    setPw("")
+  }
  
   const checkBlank = () => {
     if (id === "" || pw === ""){
@@ -60,7 +65,7 @@ export default function Login() {
         <Link to = "/signup"><a id="signup">회원가입</a></Link>
       </li>
       <li>
-        <a id="reset">초기화</a>
+        <a id="reset" onClick={handleReset}>초기화</a>
       </li>
     </ul>
     <form action="">

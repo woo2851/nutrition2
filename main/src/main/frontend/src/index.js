@@ -12,6 +12,7 @@ import Goal from './components/js/Goal';
 import Upload from './components/js/Upload';
 import Spinner from './components/js/Spinner';
 import Search from './components/js/Search';
+import Intake from './components/js/Intake';
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       {path: 'signup', element: <SignUp/>},
       {path: 'main', element: <Main/>},
       {path: 'dashboard', element: <Dashboard/>},
+      {path: 'intake', element: <Intake/>},
       {path: 'goal', element: <Goal/>},
       {path: 'search', element: <Search/>},
       {path: 'upload', element: <Upload/>},

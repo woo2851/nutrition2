@@ -69,6 +69,15 @@ export default class UserService{
     }
   };
 
+  async getNutritionAllIntake(id){
+    try {
+      return(
+      await axios.get(`http://localhost:9001/getNutrition/all/intake/${id}`).then((res) => {return res}));
+    } catch (error) {
+      console.error('Error getting nutrition:', error);
+    }
+  };
+
   async getRecommend(id){
     try {
       return(

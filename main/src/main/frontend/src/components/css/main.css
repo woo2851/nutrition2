@@ -77,3 +77,8 @@
 .food_item {
     margin-bottom: 4px;
 }
+
+.intake_paginate{
+    display: flex;
+    justify-content: center;
+}

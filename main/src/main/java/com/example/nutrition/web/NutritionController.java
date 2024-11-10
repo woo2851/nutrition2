@@ -31,6 +31,11 @@ public class NutritionController {
         return this.userService.getNutritionAll(id);
     }
 
+    @GetMapping("/all/intake/{id}")
+    public ArrayList<String> getNutritionAllIntake(@PathVariable String id) {
+        return this.userService.getNutritionAllIntake(id);
+    }
+
     @GetMapping("/recommend/{id}")
     public ArrayList<String> getRecommend(@PathVariable String id) {
         return this.userService.getRecommend(id);

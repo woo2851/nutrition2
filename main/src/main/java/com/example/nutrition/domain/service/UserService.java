@@ -381,126 +381,110 @@ public class UserService {
         if (nutritions.isEmpty()){
             ArrayList<Float> zero_list = new ArrayList<>(List.of(0F, 0F, 0F, 0F, 0F));
             result.add(zero_list);
-
-            if(user.isPresent()){
-                ArrayList<Float> temp_list = new ArrayList<>();
-                User temp = user.get();
-                Float Standard_male_kcal = 1650F;
-                Float Standard_female_kcal = 1350F;
-                Float Standard_carb = 100F;
-                Float Standard_sugar = 65F;
-                int Standard_fat = temp.getWeight();
-                int Standard_protein = temp.getWeight();
-                if(temp.getGender().equals("male")){
-                    if (goal.equals("diet")){
-                        temp_list.add(Standard_male_kcal - 200F);
-                        temp_list.add((float) (Standard_carb * 0.8));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) (Standard_fat * 0.8));
-                        temp_list.add((float) (Standard_protein * 0.8));
-                    }
-                    else if (goal.equals("common")){
-                        temp_list.add(Standard_male_kcal);
-                        temp_list.add((Standard_carb));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) Standard_fat);
-                        temp_list.add((float) Standard_protein);
-                    }
-                    else if (goal.equals("muscle")){
-                        temp_list.add(Standard_male_kcal + 200F);
-                        temp_list.add((float) (Standard_carb * 1.2));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) (Standard_fat * 1.2));
-                        temp_list.add((float) (Standard_protein * 1.2));
-                    }
-                }
-                else if(temp.getGender().equals("female")){
-                    if (goal.equals("diet")){
-                        temp_list.add(Standard_female_kcal - 200F);
-                        temp_list.add((float) (Standard_carb * 0.8));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) (Standard_fat * 0.8));
-                        temp_list.add((float) (Standard_protein * 0.8));
-                    }
-                    else if (goal.equals("common")){
-                        temp_list.add(Standard_female_kcal);
-                        temp_list.add((Standard_carb));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) Standard_fat);
-                        temp_list.add((float) Standard_protein);
-                    }
-                    else if (goal.equals("muscle")){
-                        temp_list.add(Standard_female_kcal + 200F);
-                        temp_list.add((float) (Standard_carb * 1.2));
-                        temp_list.add(Standard_sugar);
-                        temp_list.add((float) (Standard_fat * 1.2));
-                        temp_list.add((float) (Standard_protein * 1.2));
-                    }
-                }
-                result.add(temp_list);
-            }
-            return result;
         }
-
-        for(String nutrition : nutrition_list){
-            switch (nutrition) {
-                case "kcal" -> {
-                    Float kcal = (float) 0;
-                    for (UserNutrition userNutrition : nutritions) {
-                        kcal += userNutrition.getKcal();
+        else{
+            for(String nutrition : nutrition_list){
+                switch (nutrition) {
+                    case "kcal" -> {
+                        Float kcal = (float) 0;
+                        for (UserNutrition userNutrition : nutritions) {
+                            kcal += userNutrition.getKcal();
+                        }
+                        nutrition_value.add((float) Math.ceil(kcal));
                     }
-                    nutrition_value.add((float) Math.ceil(kcal));
-                }
-                case "carb" -> {
-                    Float carb = (float) 0;
-                    for (UserNutrition userNutrition : nutritions) {
-                        carb += userNutrition.getCarb();
+                    case "carb" -> {
+                        Float carb = (float) 0;
+                        for (UserNutrition userNutrition : nutritions) {
+                            carb += userNutrition.getCarb();
+                        }
+                        nutrition_value.add((float) Math.ceil(carb));
                     }
-                    nutrition_value.add((float) Math.ceil(carb));
-                }
-                case "sugar" -> {
-                    Float sugar = (float) 0;
-                    for (UserNutrition userNutrition : nutritions) {
-                        sugar += userNutrition.getSugar();
+                    case "sugar" -> {
+                        Float sugar = (float) 0;
+                        for (UserNutrition userNutrition : nutritions) {
+                            sugar += userNutrition.getSugar();
+                        }
+                        nutrition_value.add((float) Math.ceil(sugar));
                     }
-                    nutrition_value.add((float) Math.ceil(sugar));
-                }
-                case "fat" -> {
-                    Float fat = (float) 0;
-                    for (UserNutrition userNutrition : nutritions) {
-                        fat += userNutrition.getFat();
+                    case "fat" -> {
+                        Float fat = (float) 0;
+                        for (UserNutrition userNutrition : nutritions) {
+                            fat += userNutrition.getFat();
+                        }
+                        nutrition_value.add((float) Math.ceil(fat));
                     }
-                    nutrition_value.add((float) Math.ceil(fat));
-                }
-                case "protein" -> {
-                    Float protein = (float) 0;
-                    for (UserNutrition userNutrition : nutritions) {
-                        protein += userNutrition.getProtein();
+                    case "protein" -> {
+                        Float protein = (float) 0;
+                        for (UserNutrition userNutrition : nutritions) {
+                            protein += userNutrition.getProtein();
+                        }
+                        nutrition_value.add((float) Math.ceil(protein));
                     }
-                    nutrition_value.add((float) Math.ceil(protein));
                 }
             }
+
+            System.out.println(nutrition_value);
+            result.add(nutrition_value);
         }
 
-        System.out.println(nutrition_value);
-        result.add(nutrition_value);
 
         if(user.isPresent()){
             ArrayList<Float> temp_list = new ArrayList<>();
             User temp = user.get();
+            Float Standard_male_kcal = 1650F;
+            Float Standard_female_kcal = 1350F;
+            Float Standard_carb = 100F;
+            Float Standard_sugar = 65F;
+            int Standard_fat = temp.getWeight();
+            int Standard_protein = temp.getWeight();
             if(temp.getGender().equals("male")){
-                temp_list.add(1650F);
+                if (goal.equals("diet")){
+                    temp_list.add(Standard_male_kcal - 200F);
+                    temp_list.add((float) (Standard_carb * 0.8));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) (Standard_fat * 0.8));
+                    temp_list.add((float) (Standard_protein * 0.8));
+                }
+                else if (goal.equals("common")){
+                    temp_list.add(Standard_male_kcal);
+                    temp_list.add((Standard_carb));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) Standard_fat);
+                    temp_list.add((float) Standard_protein);
+                }
+                else if (goal.equals("muscle")){
+                    temp_list.add(Standard_male_kcal + 200F);
+                    temp_list.add((float) (Standard_carb * 1.2));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) (Standard_fat * 1.2));
+                    temp_list.add((float) (Standard_protein * 1.2));
+                }
             }
-            else{
-                temp_list.add(1350F);
+            else if(temp.getGender().equals("female")){
+                if (goal.equals("diet")){
+                    temp_list.add(Standard_female_kcal - 200F);
+                    temp_list.add((float) (Standard_carb * 0.8));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) (Standard_fat * 0.8));
+                    temp_list.add((float) (Standard_protein * 0.8));
+                }
+                else if (goal.equals("common")){
+                    temp_list.add(Standard_female_kcal);
+                    temp_list.add((Standard_carb));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) Standard_fat);
+                    temp_list.add((float) Standard_protein);
+                }
+                else if (goal.equals("muscle")){
+                    temp_list.add(Standard_female_kcal + 200F);
+                    temp_list.add((float) (Standard_carb * 1.2));
+                    temp_list.add(Standard_sugar);
+                    temp_list.add((float) (Standard_fat * 1.2));
+                    temp_list.add((float) (Standard_protein * 1.2));
+                }
             }
-            temp_list.add(100F);
-            temp_list.add(65F);
-            temp_list.add((float) (temp.getWeight()));
-            temp_list.add((float) temp.getWeight());
             result.add(temp_list);
         }
-
         return result;
     }
 
@@ -557,7 +541,47 @@ public class UserService {
             return result;
         }
 
-    MultipartFile resizeImage(MultipartFile file, int width, int height) throws Exception {
+    public ArrayList<String> getNutritionAllIntake(String id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<LocalDate> temp_date = new ArrayList<>();
+        ArrayList<String> temp_food_name = new ArrayList<>();
+        ArrayList<Float> temp_kcal = new ArrayList<>();
+        ArrayList<Float> temp_carb = new ArrayList<>();
+        ArrayList<Float> temp_sugar = new ArrayList<>();
+        ArrayList<Float> temp_fat = new ArrayList<>();
+        ArrayList<Float> temp_protein = new ArrayList<>();
+        LocalDate now = LocalDate.now();
+        LocalDate before = LocalDate.now().minusDays(4);
+
+
+        List<UserNutrition> temp = this.userNutritionRepository.findAllFromLast4Days(id, before, now);
+
+        if(temp.isEmpty()){
+            return new ArrayList<>(List.of(""));
+        }
+
+        for(int i = 0; i < temp.size(); i++){
+            UserNutrition user = temp.get(i);
+            StringBuffer temp_result =  new StringBuffer();
+            temp_result.append(user.getDate().toString());
+            temp_result.append(" ");
+            temp_result.append(user.getFood_name());
+            temp_result.append(" ");
+            temp_result.append(user.getKcal().toString());
+            temp_result.append(" ");
+            temp_result.append(Math.ceil(user.getCarb()));
+            temp_result.append(" ");
+            temp_result.append(Math.ceil(user.getSugar()));
+            temp_result.append(" ");
+            temp_result.append(Math.ceil(user.getFat()));
+            temp_result.append(" ");
+            temp_result.append(Math.ceil(user.getProtein()));
+            result.add(String.valueOf(temp_result));
+        }
+        return result;
+    }
+
+    public MultipartFile resizeImage(MultipartFile file, int width, int height) throws Exception {
         // resize에 들어가는 속성을 변경해서 여러 모드로 변경해줄수있다
         BufferedImage originalImage = ImageIO.read(file.getInputStream());
 

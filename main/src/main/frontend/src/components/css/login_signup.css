@@ -354,7 +354,7 @@ label {
 }
 
 
-input[type="radio"] {
+.goal_radio {
   appearance: none; /* 기본 스타일 제거 (크로스 브라우저) */
   -webkit-appearance: none; /* 사파리 호환성 */
   -moz-appearance: none;

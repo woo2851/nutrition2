@@ -3,6 +3,7 @@ import Chart from 'chart.js/auto';
 import { Line } from 'react-chartjs-2';
 import { useLogin } from '../context/LoginContext'
 import '../css/nav_footer.css'
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
 
@@ -26,7 +27,8 @@ export default function Dashboard() {
     }
   )
 
-  const [chartOptions, setChartOptions] = useState({
+  const [chartOptions, setChartOptions] = useState({ 
+    maintainAspectRatio: false, 
     responsive: true,
     plugins: {
       legend: {
@@ -88,9 +90,6 @@ export default function Dashboard() {
     data()
     };
   }, [])
-  const handleSelectChange = (event) => {
-    setSelectedOption(event.target.value);  
-  };
 
   const getNutrition = async (e) => {
     e.preventDefault()
@@ -108,6 +107,10 @@ export default function Dashboard() {
       ]
     })
   }
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);  
+  };
   
 return (
   <div className='dashboard'>
@@ -125,6 +128,7 @@ return (
     <div className='chart'>
         <Line type="line" data={chartData} options={chartOptions}/>
       </div>
+      <Link to = "/intake"><button className='button dashboard_button'>섭취 식품 확인</button></Link>
   </div>
   );
 }

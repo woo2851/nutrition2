@@ -7,7 +7,7 @@ export default function Goal() {
 
 
   const [goal, setGoal] = useState("일반")
-  const [feedback, SetFeedback] = useState("")
+  const [feedback, setFeedback] = useState("")
   const [recommend, setRecommend] = useState("로딩중")
   const [description, setDescription] = useState("로딩중")
   const [nutritionData, setNutritionData] = useState([
@@ -31,16 +31,7 @@ export default function Goal() {
         ])
       }
       fetchData();
-      const feedbackItems = []
-      const calculateFeedback =  () => {
-      for(const n of nutritionData){
-      if(n.difference === "부족"){
-          feedbackItems.push(n.nutrition)
-        }
-      }
-        SetFeedback("부족한 영양소 : " + feedbackItems)
-      }
-      calculateFeedback()
+
       const fetchRecommend = async () => {
         setRecommend("로딩중")
         setDescription("로딩중")
@@ -50,7 +41,23 @@ export default function Goal() {
       }
       fetchRecommend()
     }
-  }, [isLoggedIn, user, goal])
+  }, [goal])
+
+  useEffect(() => {
+    const calculateFeedback = () => {
+      const feedbackItems = [];
+      for (const n of nutritionData) {
+        if (n.difference === "부족") {
+          feedbackItems.push(n.nutrition);
+        }
+      }
+      setFeedback("부족한 영양소 : " + feedbackItems.join(", "));
+    };
+  
+    if (nutritionData.length > 0) {
+      calculateFeedback();
+    }
+  }, [nutritionData]);
 
   const handleOptionChange = (e) => {
     setGoal(e.target.value);
@@ -74,6 +81,7 @@ export default function Goal() {
             <h3 className='goal_h3'>선택하세요 :</h3>
             <label className={`radio-button ${goal === '다이어트' ? 'selected' : ''}`}>
                 <input
+                    className='goal_radio'
                     type="radio"
                     value="다이어트"
                     checked={goal === '다이어트'}
@@ -83,6 +91,7 @@ export default function Goal() {
             </label>
             <label className={`radio-button ${goal === '일반' ? 'selected' : ''}`}>
                 <input
+                    className='goal_radio'
                     type="radio"
                     value="일반"
                     checked={goal === '일반'}
@@ -92,6 +101,7 @@ export default function Goal() {
             </label>
             <label className={`radio-button ${goal === '근성장' ? 'selected' : ''}`}>
                 <input
+                    className='goal_radio'
                     type="radio"
                     value="근성장"
                     checked={goal === '근성장'}

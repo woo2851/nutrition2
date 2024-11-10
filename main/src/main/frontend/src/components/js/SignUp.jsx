@@ -48,6 +48,14 @@ export default function SignUp() {
     setGender(event.target.value)
   };
 
+  const handleReset = () => {
+    setId("")
+    setPw("")
+    setPwCheck("")
+    setGender("")
+    setWeight("")
+  }
+
   const checkBlank = () => {
     if (id === "" || pw === "" || pwCheck === "" || weight === "" || gender === "" || isNaN(weight)) {
       return true
@@ -71,7 +79,7 @@ export default function SignUp() {
     <Link to="/signup"><a id="signup">회원가입</a></Link>
   </li>
   <li>
-    <a id="reset">초기화</a>
+    <a id="reset" onClick={handleReset}>초기화</a>
   </li>
 </ul>
 

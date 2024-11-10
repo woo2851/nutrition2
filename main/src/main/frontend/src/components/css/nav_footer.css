@@ -256,19 +256,20 @@ button {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 550px;
+    height: 580px;
 }
 
 .chart{
     width: 53%;
     height: 400px;
+    margin-bottom: 10px;
 }
 
 .dashboard_search{
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    margin: 30px
 }
 
 .upload_h2{

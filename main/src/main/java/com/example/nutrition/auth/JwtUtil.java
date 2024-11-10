@@ -5,13 +5,15 @@
 //import io.jsonwebtoken.Claims;
 //import org.springframework.stereotype.Component;
 //import java.util.Date;
+//import java.util.HashMap;
 //import java.util.Map;
 //
 //@Component
 //public class JwtUtil {
-//    private final String SECRET_KEY = "your_secret_key";
+//    private final String SECRET_KEY = "tjdals0815";
 //
-//    public String generateToken(Map<String, Object> claims, String subject) {
+//    public String generateToken(String subject) {
+//        Map<String, Object> claims = new HashMap<>();
 //        return Jwts.builder()
 //                .setClaims(claims)
 //                .setSubject(subject)

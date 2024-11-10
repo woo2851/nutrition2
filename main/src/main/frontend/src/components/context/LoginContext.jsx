@@ -16,6 +16,7 @@ export const LoginProvider = ({ children }) => {
 
   const login = async (id,pw) => {
     const new_user = await user.login(id,pw)
+    // localStorage.setItem('token', new_user);
     console.log(new_user)
     
     if(new_user.data !== "") {
@@ -114,6 +115,11 @@ export const LoginProvider = ({ children }) => {
     return result.data
   }
 
+  const getNutritionAllIntake = async (user) => {
+    const result = await user.getNutritionAllIntake(user.id)
+    return result.data
+  }
+
   const getRecommend = async (user) => {
     const result = await user.getRecommend(user.id)
     return result.data
@@ -135,7 +141,7 @@ export const LoginProvider = ({ children }) => {
   }
 
   return (
-    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionDailyContext, setUser, getRecommend, searchFood, addFood, searchFoodByKcal}}>
+    <LoginContext.Provider value={{isLoggedIn, changeLogin, signUp, login, logout, user, uploadFile, getNutritionContext, getNutritionAllContext, getNutritionAllIntake, getNutritionDailyContext, setUser, getRecommend, searchFood, addFood, searchFoodByKcal}}>
       {children}
     </LoginContext.Provider>
   );
